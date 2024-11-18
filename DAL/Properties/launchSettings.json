@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "DAL": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}

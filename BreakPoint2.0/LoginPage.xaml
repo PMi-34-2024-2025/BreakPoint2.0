@@ -1,0 +1,55 @@
+﻿<Page
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:av="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="av" x:Class="BreakPoint2._0.LoginPage"
+      Title="Login" av:DesignHeight="500" av:DesignWidth="800">
+
+    <Grid Background="#f0f4f8" Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Заголовок -->
+        <TextBlock Text="Login"
+                   FontSize="32"
+                   FontWeight="Bold"
+                   Foreground="Black"
+                   HorizontalAlignment="Center"
+                   Margin="0,5,0,25" />
+
+        <!-- Поля вводу -->
+        <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center" Height="273" Width="424" Margin="0,35,0,0" Grid.Row="1">
+            <!-- TextBox для введення логіна -->
+            <Grid>
+                <TextBox x:Name="UsernameTextBox" Width="250" Margin="0,5"/>
+                <!-- Плейсхолдер для TextBox -->
+                <TextBlock x:Name="UsernamePlaceholder" Text="Username" Foreground="Gray" 
+                           VerticalAlignment="Center" HorizontalAlignment="Left" 
+                           Margin="5,0,0,0" IsHitTestVisible="False" />
+            </Grid>
+
+            <!-- PasswordBox для введення паролю -->
+            <Grid>
+                <PasswordBox x:Name="PasswordBox" Width="250" Margin="0,5"/>
+                <!-- Плейсхолдер для PasswordBox -->
+                <TextBlock x:Name="PasswordPlaceholder" Text="Password" Foreground="Gray" 
+                           VerticalAlignment="Center" HorizontalAlignment="Left" 
+                           Margin="5,0,0,0" IsHitTestVisible="False" />
+            </Grid>
+
+            <!-- Кнопка для входу -->
+            <Button Content="Log In"
+                    FontSize="16"
+                    FontWeight="Bold"
+                    Foreground="White"
+                    Background="Black"
+                    Padding="10,5"
+                    Margin="0,20,0,0"
+                    Width="150"
+                    Height="40"
+                    Click="OnStartButtonClick"/>
+        </StackPanel>
+    </Grid>
+</Page>

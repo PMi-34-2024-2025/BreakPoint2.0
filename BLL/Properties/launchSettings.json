@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "BLL": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}

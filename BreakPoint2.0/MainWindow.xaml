@@ -1,0 +1,12 @@
+﻿<Window x:Class="BreakPoint2._0.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Початкова сторінка"
+        Height="500"
+        Width="800"
+        Background="#f0f4f8">
+    <Grid Margin="20">
+        <!-- Frame для сторінок -->
+        <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" />
+    </Grid>
+</Window>
