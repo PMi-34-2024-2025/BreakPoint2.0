@@ -27,7 +27,7 @@ namespace BreakPoint2._0
 
         private void OnStartStretchingClick(object sender, RoutedEventArgs e)
         {
-
+            NavigationService.Navigate(new TrackingApps());
         }
     }
 }
