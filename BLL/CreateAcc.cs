@@ -87,10 +87,10 @@ namespace BLL
                 connection.Open();
 
 
-
-
-                // Перевірка наявності користувача з таким email
+                // Перевірка наявності користувача з таким ніком
                 using (var checkCommand = new NpgsqlCommand("SELECT \"UserPassword\" FROM \"Users\" WHERE \"UserName\" = @Nickname", connection))
+
+
 
                 {
                     checkCommand.Parameters.AddWithValue("@Nickname", nickname);

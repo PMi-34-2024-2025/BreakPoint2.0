@@ -42,5 +42,11 @@ namespace BreakPoint2._0
             }
         }
 
+        private void OnBackButtonClick(object sender, RoutedEventArgs e)
+        {
+            // Переходимо на сторінку логування
+            this.NavigationService.Navigate(new LoginPage());
+        }
+
     }
 }
