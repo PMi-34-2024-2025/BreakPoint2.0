@@ -74,7 +74,7 @@ namespace BLL
                 connection.Open();
 
                 // Перевірка наявності користувача з таким email
-                using (var checkCommand = new NpgsqlCommand("SELECT \"UserPassword\" FROM \"User\" WHERE \"UserEmail\" = @Email", connection))
+                using (var checkCommand = new NpgsqlCommand("SELECT \"UserPassword\" FROM \"Users\" WHERE \"UserEmail\" = @Email", connection))
                 {
                     checkCommand.Parameters.AddWithValue("@Email", email);
                     var result = checkCommand.ExecuteScalar();
