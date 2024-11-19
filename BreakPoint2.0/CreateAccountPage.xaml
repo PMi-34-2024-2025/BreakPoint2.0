@@ -22,50 +22,24 @@
                    Margin="0,5,0,25" />
 
         <!-- Поля вводу -->
-        <Grid Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Center">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="200" />
-            </Grid.ColumnDefinitions>
-
+        <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center" Width="424" Margin="0,35,0,0" Grid.Row="1">
             <!-- Поле для введення ніку -->
-            <TextBlock Text="Nickname:"
-                       VerticalAlignment="Center"
-                       Margin="0,0,10,0"
-                       FontWeight="Bold"
-                       Grid.Row="0" Grid.Column="0" />
-
-            <TextBox x:Name="NicknameTextBox"
-                     Height="30"
-                     Grid.Row="0" Grid.Column="1" />
+            <Grid Margin="0,5">
+                <TextBox x:Name="NicknameTextBox" Width="250" Padding="5" />
+                <TextBlock Text="Nickname" Foreground="Gray" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0,0,0" IsHitTestVisible="False"/>
+            </Grid>
 
             <!-- Поле для введення пошти -->
-            <TextBlock Text="Email:"
-                       VerticalAlignment="Center"
-                       Margin="0,0,10,0"
-                       FontWeight="Bold"
-                       Grid.Row="1" Grid.Column="0" />
-
-            <TextBox x:Name="EmailTextBox"
-                     Height="30"
-                     Grid.Row="1" Grid.Column="1" />
+            <Grid Margin="0,5">
+                <TextBox x:Name="EmailTextBox" Width="250" Padding="5" />
+                <TextBlock Text="Email" Foreground="Gray" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0,0,0" IsHitTestVisible="False"/>
+            </Grid>
 
             <!-- Поле для введення пароля -->
-            <TextBlock Text="Password:"
-                       VerticalAlignment="Center"
-                       Margin="0,0,10,0"
-                       FontWeight="Bold"
-                       Grid.Row="2" Grid.Column="0" />
-
-            <PasswordBox x:Name="PasswordBox"
-                         Height="30"
-                         Grid.Row="2" Grid.Column="1" />
+            <Grid Margin="0,5">
+                <PasswordBox x:Name="PasswordBox" Width="250" Padding="5" />
+                <TextBlock Text="Password" Foreground="Gray" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0,0,0" IsHitTestVisible="False"/>
+            </Grid>
 
             <!-- Кнопка для створення аккаунта -->
             <Button Content="Sign Up"
@@ -78,8 +52,21 @@
                     Width="150"
                     Height="40"
                     HorizontalAlignment="Center"
-                    Grid.Row="3" Grid.ColumnSpan="2"
                     Click="OnSignUpButtonClick"/>
-        </Grid>
+
+            <!-- Кнопка повернення -->
+            <Button Content="Back"
+                    FontSize="16"
+                    FontWeight="Bold"
+                    Foreground="White"
+                    Background="Gray"
+                    Padding="10,5"
+                    Width="100"
+                    Height="40"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Margin="0,20,0,0"
+                    Click="OnBackButtonClick" />
+        </StackPanel>
     </Grid>
 </Page>
