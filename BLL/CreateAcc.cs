@@ -28,14 +28,26 @@ namespace BLL
                 connection.Open();
 
                 // Перевірка, чи існує вже користувач із такою поштою
-                using (var checkCommand = new NpgsqlCommand("SELECT COUNT(*) FROM \"Users\" WHERE \"UserEmail\" = @Email", connection))
+                using (var checkEmailCommand = new NpgsqlCommand("SELECT COUNT(*) FROM \"Users\" WHERE \"UserEmail\" = @Email", connection))
                 {
-                    checkCommand.Parameters.AddWithValue("@Email", email);
-                    var userExists = (long)checkCommand.ExecuteScalar() > 0;
+                    checkEmailCommand.Parameters.AddWithValue("@Email", email);
+                    var emailExists = (long)checkEmailCommand.ExecuteScalar() > 0;
 
-                    if (userExists)
+                    if (emailExists)
                     {
                         throw new InvalidOperationException("User with this email already exists.");
+                    }
+                }
+
+                // Перевірка, чи існує вже користувач із таким нікнеймом
+                using (var checkNicknameCommand = new NpgsqlCommand("SELECT COUNT(*) FROM \"Users\" WHERE \"UserName\" = @Nickname", connection))
+                {
+                    checkNicknameCommand.Parameters.AddWithValue("@Nickname", nickname);
+                    var nicknameExists = (long)checkNicknameCommand.ExecuteScalar() > 0;
+
+                    if (nicknameExists)
+                    {
+                        throw new InvalidOperationException("User with this nickname already exists.");
                     }
                 }
 
@@ -60,11 +72,12 @@ namespace BLL
             return false;
         }
 
+
         // Функція для входу користувача
-        public bool Login(string email, string password)
+        public bool Login(string nickname, string password)
         {
             // Валідація введених даних
-            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+            if (string.IsNullOrWhiteSpace(nickname) || string.IsNullOrWhiteSpace(password))
             {
                 throw new ArgumentException("Both fields must be filled.");
             }
@@ -73,10 +86,10 @@ namespace BLL
             {
                 connection.Open();
 
-                // Перевірка наявності користувача з таким email
-                using (var checkCommand = new NpgsqlCommand("SELECT \"UserPassword\" FROM \"User\" WHERE \"UserEmail\" = @Email", connection))
+                // Перевірка наявності користувача з таким ніком
+                using (var checkCommand = new NpgsqlCommand("SELECT \"UserPassword\" FROM \"User\" WHERE \"UserNickname\" = @Nickname", connection))
                 {
-                    checkCommand.Parameters.AddWithValue("@Email", email);
+                    checkCommand.Parameters.AddWithValue("@Nickname", nickname);
                     var result = checkCommand.ExecuteScalar();
 
                     if (result == null)
