@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Npgsql;
 
 namespace BLL
@@ -86,8 +86,12 @@ namespace BLL
             {
                 connection.Open();
 
-                // Перевірка наявності користувача з таким ніком
-                using (var checkCommand = new NpgsqlCommand("SELECT \"UserPassword\" FROM \"User\" WHERE \"UserNickname\" = @Nickname", connection))
+
+                
+
+                // Перевірка наявності користувача з таким email
+                using (var checkCommand = new NpgsqlCommand("SELECT \"UserPassword\" FROM \"Users\" WHERE \"UserEmail\" = @Email", connection))
+
                 {
                     checkCommand.Parameters.AddWithValue("@Nickname", nickname);
                     var result = checkCommand.ExecuteScalar();
