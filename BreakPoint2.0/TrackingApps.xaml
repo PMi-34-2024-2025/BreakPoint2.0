@@ -9,6 +9,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal" Margin="10">
@@ -19,6 +20,7 @@
             <Button x:Name="StopButton" Content="Зупинка" Margin="5" Click="StopButton_Click" IsEnabled="False"/>
         </StackPanel>
 
+        <!-- Перший список (загальний час) -->
         <ListBox x:Name="TrackingList" 
                  Grid.Row="1" 
                  Margin="10"
@@ -27,7 +29,24 @@
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{Binding Name}" Width="200" Margin="5"/>
-                        <TextBlock Text="{Binding TimeSpent}" Width="150" Margin="5"/>
+                        <TextBlock Text="Загальний час: " Margin="5"/>
+                        <TextBlock Text="{Binding TimeSpent, StringFormat=hh\\:mm\\:ss}" Width="150" Margin="5"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <!-- Другий список (час за сесію) -->
+        <ListBox x:Name="SessionResultsList"
+                 Grid.Row="2"
+                 Margin="10"
+                 ItemsSource="{Binding SessionResults}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding ApplicationName}" Width="200" Margin="5"/>
+                        <TextBlock Text="Тривалість сесії: " Margin="5"/>
+                        <TextBlock Text="{Binding SessionDuration, StringFormat=hh\\:mm\\:ss}" Width="150" Margin="5"/>
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
