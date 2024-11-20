@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Npgsql;
 
 namespace BLL
@@ -88,6 +88,7 @@ namespace BLL
                         // Отримання даних користувача
                         int userId = reader.GetInt32(0);
                         string storedPassword = reader.GetString(1);
+                      
 
                         // У реальних проєктах перевірка пароля повинна бути через хешування
                         if (storedPassword != password)

@@ -32,7 +32,7 @@ namespace BreakPoint2._0
                     MessageBox.Show($"Login successful! Your ID: {userId}", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
 
                     // Перехід на головну сторінку або іншу сторінку після успішного входу
-                    // NavigationService.Navigate(new MainPage());
+                    NavigationService.Navigate(new MainPage());
                 }
             }
             catch (Exception ex)
