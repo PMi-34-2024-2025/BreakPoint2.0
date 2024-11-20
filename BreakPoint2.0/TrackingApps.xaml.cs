@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.ComponentModel;
 
 namespace BreakPoint2._0
 {
@@ -20,11 +21,13 @@ namespace BreakPoint2._0
         [DllImport("user32.dll")]
         private static extern bool IsWindowVisible(IntPtr hWnd);
 
-        private ObservableCollection<ApplicationTime> TrackedTimes { get; set; } = new ObservableCollection<ApplicationTime>();
-        private string SelectedApp { get; set; }
+        public ObservableCollection<ApplicationTime> TrackedTimes { get; set; } = new ObservableCollection<ApplicationTime>();
+        public ObservableCollection<SessionResult> SessionResults { get; set; } = new ObservableCollection<SessionResult>();
+
+        private string? SelectedApp { get; set; }
         private DateTime LastSwitchTime = DateTime.Now;
         private bool IsTracking = false;
-        private Thread trackingThread;
+        private Thread? trackingThread;
 
         public TrackingApps()
         {
@@ -94,10 +97,19 @@ namespace BreakPoint2._0
             StartButton.IsEnabled = true;
             StopButton.IsEnabled = false;
 
+            // Додаємо час до відповідної програми в першому списку
             var trackedApp = TrackedTimes.FirstOrDefault(t => t.Name == SelectedApp);
             if (trackedApp != null)
             {
-                MessageBox.Show($"Програма: {trackedApp.Name}\nЗагальний час: {trackedApp.TimeSpent}", "Результати");
+                var sessionTime = DateTime.Now - LastSwitchTime;
+                trackedApp.TimeSpent += sessionTime;
+
+                // Додаємо запис про сесію в другий список
+                SessionResults.Add(new SessionResult
+                {
+                    ApplicationName = trackedApp.Name,
+                    SessionDuration = sessionTime
+                });
             }
         }
 
@@ -130,16 +142,6 @@ namespace BreakPoint2._0
                 {
                     if (activeApp == SelectedApp)
                     {
-                        LastSwitchTime = DateTime.Now; // Оновлюємо час переходу
-                    }
-                    else if (IsTracking)
-                    {
-                        var timeSpent = DateTime.Now - LastSwitchTime;
-                        var trackedApp = TrackedTimes.FirstOrDefault(t => t.Name == SelectedApp);
-                        if (trackedApp != null)
-                        {
-                            trackedApp.TimeSpent += timeSpent;
-                        }
                         LastSwitchTime = DateTime.Now;
                     }
                 });
@@ -153,14 +155,41 @@ namespace BreakPoint2._0
             if (ApplicationsComboBox.SelectedItem is ApplicationTime app)
             {
                 SelectedApp = app.Name;
-                StartButton.IsEnabled = true; // Дозволяємо запуск після вибору програми
+                StartButton.IsEnabled = true;
             }
         }
     }
 
-    public class ApplicationTime
+    public class ApplicationTime : INotifyPropertyChanged
     {
-        public string Name { get; set; }
-        public TimeSpan TimeSpent { get; set; } = TimeSpan.Zero;
+        private TimeSpan _timeSpent;
+
+        public string Name { get; set; } = string.Empty;
+
+        public TimeSpan TimeSpent
+        {
+            get => _timeSpent;
+            set
+            {
+                if (_timeSpent != value)
+                {
+                    _timeSpent = value;
+                    OnPropertyChanged(nameof(TimeSpent));  // Сповіщаємо про зміну
+                }
+            }
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+
+    public class SessionResult
+    {
+        public string ApplicationName { get; set; } = string.Empty;
+        public TimeSpan SessionDuration { get; set; }
     }
 }
