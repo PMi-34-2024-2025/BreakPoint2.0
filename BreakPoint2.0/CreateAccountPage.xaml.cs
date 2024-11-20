@@ -44,5 +44,10 @@ namespace BreakPoint2._0
                 MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
+        private void OnBackButtonClick(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new LoginPage());
+        }
     }
 }

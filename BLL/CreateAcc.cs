@@ -6,6 +6,7 @@ namespace BLL
     public class CreateAcc
     {
         private const string ConnectionString = "Host=breakdatabase.postgres.database.azure.com;Port=5432;Database=BreakDB;Username=postgres;Password=12345678bp!";
+        private int? CurrentUserId { get; set; } // Поле для збереження ID поточного користувача
 
         public bool Register(string nickname, string email, string password)
         {
@@ -27,15 +28,15 @@ namespace BLL
             {
                 connection.Open();
 
-                // Перевірка, чи існує вже користувач із такою поштою
-                using (var checkCommand = new NpgsqlCommand("SELECT COUNT(*) FROM \"Users\" WHERE \"UserEmail\" = @Email", connection))
+                // Перевірка, чи існує вже користувач із таким ніком
+                using (var checkCommand = new NpgsqlCommand("SELECT COUNT(*) FROM \"Users\" WHERE \"UserName\" = @Nickname", connection))
                 {
-                    checkCommand.Parameters.AddWithValue("@Email", email);
+                    checkCommand.Parameters.AddWithValue("@Nickname", nickname);
                     var userExists = (long)checkCommand.ExecuteScalar() > 0;
 
                     if (userExists)
                     {
-                        throw new InvalidOperationException("User with this email already exists.");
+                        throw new InvalidOperationException("User with this nickname already exists.");
                     }
                 }
 
@@ -60,11 +61,11 @@ namespace BLL
             return false;
         }
 
-        // Функція для входу користувача
-        public bool Login(string email, string password)
+        // Функція для входу користувача за ніком
+        public bool Login(string nickname, string password)
         {
             // Валідація введених даних
-            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+            if (string.IsNullOrWhiteSpace(nickname) || string.IsNullOrWhiteSpace(password))
             {
                 throw new ArgumentException("Both fields must be filled.");
             }
@@ -73,28 +74,41 @@ namespace BLL
             {
                 connection.Open();
 
-                // Перевірка наявності користувача з таким email
-                using (var checkCommand = new NpgsqlCommand("SELECT \"UserPassword\" FROM \"User\" WHERE \"UserEmail\" = @Email", connection))
+                // Перевірка наявності користувача з таким ніком
+                using (var checkCommand = new NpgsqlCommand("SELECT \"UserId\", \"UserPassword\" FROM \"Users\" WHERE \"UserName\" = @Nickname", connection))
                 {
-                    checkCommand.Parameters.AddWithValue("@Email", email);
-                    var result = checkCommand.ExecuteScalar();
-
-                    if (result == null)
+                    checkCommand.Parameters.AddWithValue("@Nickname", nickname);
+                    using (var reader = checkCommand.ExecuteReader())
                     {
-                        throw new InvalidOperationException("User not found.");
-                    }
+                        if (!reader.Read())
+                        {
+                            throw new InvalidOperationException("User not found.");
+                        }
 
-                    // У реальних проєктах перевірка пароля повинна бути через хешування
-                    string storedPassword = (string)result;
-                    if (storedPassword != password)
-                    {
-                        throw new InvalidOperationException("Invalid password.");
-                    }
+                        // Отримання даних користувача
+                        int userId = reader.GetInt32(0);
+                        string storedPassword = reader.GetString(1);
 
-                    Console.WriteLine("User logged in successfully.");
-                    return true; // Вхід успішний
+                        // У реальних проєктах перевірка пароля повинна бути через хешування
+                        if (storedPassword != password)
+                        {
+                            throw new InvalidOperationException("Invalid password.");
+                        }
+
+                        // Збереження ID користувача у поточній сесії
+                        CurrentUserId = userId;
+
+                        Console.WriteLine($"User logged in successfully. UserID: {CurrentUserId}");
+                        return true; // Вхід успішний
+                    }
                 }
             }
+        }
+
+        // Функція для отримання ID поточного користувача
+        public int? GetCurrentUserId()
+        {
+            return CurrentUserId;
         }
     }
 }
