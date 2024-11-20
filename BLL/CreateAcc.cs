@@ -6,6 +6,7 @@ namespace BLL
     public class CreateAcc
     {
         private const string ConnectionString = "Host=breakdatabase.postgres.database.azure.com;Port=5432;Database=BreakDB;Username=postgres;Password=12345678bp!";
+        private int? CurrentUserId { get; set; } // Поле для збереження ID поточного користувача
 
         public bool Register(string nickname, string email, string password)
         {
@@ -74,27 +75,40 @@ namespace BLL
                 connection.Open();
 
                 // Перевірка наявності користувача з таким email
-                using (var checkCommand = new NpgsqlCommand("SELECT \"UserPassword\" FROM \"User\" WHERE \"UserEmail\" = @Email", connection))
+                using (var checkCommand = new NpgsqlCommand("SELECT \"UserID\", \"UserPassword\" FROM \"Users\" WHERE \"UserEmail\" = @Email", connection))
                 {
                     checkCommand.Parameters.AddWithValue("@Email", email);
-                    var result = checkCommand.ExecuteScalar();
-
-                    if (result == null)
+                    using (var reader = checkCommand.ExecuteReader())
                     {
-                        throw new InvalidOperationException("User not found.");
-                    }
+                        if (!reader.Read())
+                        {
+                            throw new InvalidOperationException("User not found.");
+                        }
 
-                    // У реальних проєктах перевірка пароля повинна бути через хешування
-                    string storedPassword = (string)result;
-                    if (storedPassword != password)
-                    {
-                        throw new InvalidOperationException("Invalid password.");
-                    }
+                        // Отримання даних користувача
+                        int userId = reader.GetInt32(0);
+                        string storedPassword = reader.GetString(1);
 
-                    Console.WriteLine("User logged in successfully.");
-                    return true; // Вхід успішний
+                        // У реальних проєктах перевірка пароля повинна бути через хешування
+                        if (storedPassword != password)
+                        {
+                            throw new InvalidOperationException("Invalid password.");
+                        }
+
+                        // Збереження ID користувача у поточній сесії
+                        CurrentUserId = userId;
+
+                        Console.WriteLine($"User logged in successfully. UserID: {CurrentUserId}");
+                        return true; // Вхід успішний
+                    }
                 }
             }
+        }
+
+        // Функція для отримання ID поточного користувача
+        public int? GetCurrentUserId()
+        {
+            return CurrentUserId;
         }
     }
 }
