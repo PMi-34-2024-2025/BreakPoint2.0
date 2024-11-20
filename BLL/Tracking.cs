@@ -1,15 +1,19 @@
-﻿// BLL/TrackingService.cs
+﻿using Npgsql;  // Для роботи з PostgreSQL
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
+using BLL;
 
 namespace BLL
 {
     public class Tracking
     {
+        private string connectionString = "Host=breakdatabase.postgres.database.azure.com;Port=5432;Database=BreakDB;Username=postgres;Password=12345678bp!"; // замініть на ваші налаштування бази даних
+
         public ObservableCollection<ApplicationTime> TrackedTimes { get; set; } = new ObservableCollection<ApplicationTime>();
         public ObservableCollection<SessionResult> SessionResults { get; set; } = new ObservableCollection<SessionResult>();
 
@@ -23,6 +27,7 @@ namespace BLL
             LoadApplications();
         }
 
+        // Завантажуємо програми, які зараз працюють
         private void LoadApplications()
         {
             var apps = GetRunningApplications();
@@ -32,6 +37,7 @@ namespace BLL
             }
         }
 
+        // Отримуємо список всіх запущених програм
         private ObservableCollection<string> GetRunningApplications()
         {
             var applications = new ObservableCollection<string>();
@@ -52,6 +58,54 @@ namespace BLL
             return applications;
         }
 
+        // Додаємо програму до бази даних, якщо її ще немає
+        private void AddGameToDatabase(string gameName)
+        {
+            using (var connection = new NpgsqlConnection(connectionString))
+            {
+                connection.Open();
+
+                // Перевірка, чи є вже програма в базі
+                var command = new NpgsqlCommand("SELECT \"GameId\" FROM public.\"Games\" WHERE \"GameName\" = @gameName", connection);
+                command.Parameters.AddWithValue("gameName", gameName);
+
+                var result = command.ExecuteScalar();
+                if (result == null) // Якщо програма не знайдена, додаємо її
+                {
+                    var insertCommand = new NpgsqlCommand("INSERT INTO public.\"Games\" (\"GameName\") VALUES (@gameName) RETURNING \"GameId\"", connection);
+                    insertCommand.Parameters.AddWithValue("gameName", gameName);
+                    var gameId = insertCommand.ExecuteScalar();
+                    // Зберігаємо GameId для подальшого використання
+                    TrackedTimes.First(t => t.Name == gameName).GameId = (int)gameId;
+                }
+                else
+                {
+                    TrackedTimes.First(t => t.Name == gameName).GameId = (int)result;
+                }
+            }
+        }
+
+        // Додаємо сесію в базу даних
+        private void AddSessionToDatabase(int userId, int gameId, DateTime start, DateTime end)
+        {
+            using (var connection = new NpgsqlConnection(connectionString))
+            {
+                connection.Open();
+
+                var command = new NpgsqlCommand(
+                    "INSERT INTO public.\"Sessions\" (\"UserId\", \"GameId\", \"GameName\", \"Start\", \"End\") VALUES (@userId, @gameId, @gameName, @start, @end)", connection);
+
+                command.Parameters.AddWithValue("userId", userId);
+                command.Parameters.AddWithValue("gameId", gameId);
+                command.Parameters.AddWithValue("gameName", SelectedApp);  // Використовуємо назву програми
+                command.Parameters.AddWithValue("start", start);
+                command.Parameters.AddWithValue("end", end);
+
+                command.ExecuteNonQuery();
+            }
+        }
+
+        // Запускаємо відстеження для вибраної програми
         public void StartTracking(string selectedApp)
         {
             if (string.IsNullOrEmpty(selectedApp)) return;
@@ -60,6 +114,9 @@ namespace BLL
             IsTracking = true;
             LastSwitchTime = DateTime.Now;
 
+            // Додати програму в базу даних, якщо її ще немає
+            AddGameToDatabase(selectedApp);
+
             trackingThread = new Thread(TrackActiveWindow)
             {
                 IsBackground = true
@@ -67,6 +124,7 @@ namespace BLL
             trackingThread.Start();
         }
 
+        // Зупиняємо відстеження і додаємо сесію в базу даних
         public void StopTracking()
         {
             IsTracking = false;
@@ -88,9 +146,15 @@ namespace BLL
                     ApplicationName = trackedApp.Name,
                     SessionDuration = sessionTime
                 });
+
+                // Отримуємо UserId і додаємо сесію до бази даних
+                CreateAcc createAcc = new CreateAcc();
+                int userId = 1; //createAcc.GetCurrentUserId(); // Викликаємо вашу функцію GetCurrentUserId
+                AddSessionToDatabase(userId, trackedApp.GameId, LastSwitchTime, DateTime.Now);
             }
         }
 
+        // Відстежуємо активне вікно
         private void TrackActiveWindow()
         {
             while (IsTracking)
@@ -118,6 +182,11 @@ namespace BLL
 
                 if (activeApp == SelectedApp)
                 {
+                    var trackedApp = TrackedTimes.FirstOrDefault(t => t.Name == activeApp);
+                    if (trackedApp != null)
+                    {
+                        trackedApp.TimeSpent += TimeSpan.FromSeconds(1);
+                    }
                     LastSwitchTime = DateTime.Now;
                 }
 
@@ -133,12 +202,42 @@ namespace BLL
 
         [DllImport("user32.dll")]
         private static extern bool IsWindowVisible(IntPtr hWnd);
+
+        
     }
 
-    public class ApplicationTime
+    public class ApplicationTime : INotifyPropertyChanged
     {
-        public string Name { get; set; } = string.Empty;
-        public TimeSpan TimeSpent { get; set; }
+        private string _name = string.Empty;
+        private TimeSpan _timeSpent;
+        public int GameId { get; set; }  // Зберігаємо GameId
+
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                _name = value;
+                OnPropertyChanged(nameof(Name));
+            }
+        }
+
+        public TimeSpan TimeSpent
+        {
+            get => _timeSpent;
+            set
+            {
+                _timeSpent = value;
+                OnPropertyChanged(nameof(TimeSpent));
+            }
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 
     public class SessionResult
@@ -147,4 +246,3 @@ namespace BLL
         public TimeSpan SessionDuration { get; set; }
     }
 }
-
