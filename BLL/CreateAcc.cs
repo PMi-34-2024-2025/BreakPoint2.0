@@ -6,7 +6,7 @@ namespace BLL
     public class CreateAcc
     {
         private const string ConnectionString = "Host=breakdatabase.postgres.database.azure.com;Port=5432;Database=BreakDB;Username=postgres;Password=12345678bp!";
-        private int? CurrentUserId { get; set; } // Поле для збереження ID поточного користувача
+        private int CurrentUserId { get; set; } // Поле для збереження ID поточного користувача
 
         public bool Register(string nickname, string email, string password)
         {
@@ -107,7 +107,7 @@ namespace BLL
         }
 
         // Функція для отримання ID поточного користувача
-        public int? GetCurrentUserId()
+        public int GetCurrentUserId()
         {
             return CurrentUserId;
         }

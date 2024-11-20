@@ -1,5 +1,4 @@
-﻿// PL/TrackingApps.xaml.cs
-using BLL;
+﻿using BLL;
 using System.Windows;
 using System.Windows.Controls;
 
