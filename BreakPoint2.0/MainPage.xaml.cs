@@ -1,4 +1,3 @@
-﻿using BLL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,11 +20,10 @@ namespace BreakPoint2._0
     /// </summary>
     public partial class MainPage : Page
     {
-        private Tracking _tracking;
-        private UserService _userService;
         public MainPage()
         {
             InitializeComponent();
+
             _tracking = new Tracking();
             _userService = new UserService();
         }
@@ -75,7 +73,7 @@ namespace BreakPoint2._0
         private void LogOutButton_Click(object sender, RoutedEventArgs e)
         {
            // вихід з акаунту
-            
+
         }
 
         private void OnStartStretchingClick(object sender, RoutedEventArgs e)

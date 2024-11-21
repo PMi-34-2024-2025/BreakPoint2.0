@@ -1,4 +1,5 @@
-﻿<Page x:Class="BreakPoint2._0.MainPage"
+
+<Page x:Class="BreakPoint2._0.MainPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       Title="Dashboard" Height="450" Width="800" Background="White">
@@ -60,5 +61,7 @@
                 <Button Content="Log Out" Width="80" Height="30" Margin="10,0,0,0" Click="LogOutButton_Click" />
             </StackPanel>
         </Grid>
+
+
     </Grid>
 </Page>
