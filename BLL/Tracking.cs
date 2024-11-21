@@ -26,45 +26,6 @@ namespace BLL
         {
             LoadApplications();
         }
-        public ObservableCollection<MostUsedApplication> GetAllGamesTimeForUser(int userId)
-        {
-            var gamesTime = new ObservableCollection<MostUsedApplication>();
-
-            using (var connection = new NpgsqlConnection(connectionString))
-            {
-                connection.Open();
-
-                var command = new NpgsqlCommand(
-                    "SELECT \"GameName\", SUM(EXTRACT(EPOCH FROM \"End\" - \"Start\")) AS total_time " +
-                    "FROM public.\"Sessions\" " +
-                    "WHERE \"UserId\" = @UserId " +  // фільтрування за користувачем
-                    "GROUP BY \"GameName\" " +
-                    "ORDER BY total_time DESC", connection);
-
-                // Додавання параметра для UserId
-                command.Parameters.AddWithValue("@UserId", userId);
-
-                using (var reader = command.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        var appName = reader.GetString(0);
-                        var totalTimeSeconds = reader.GetDouble(1);
-
-                        gamesTime.Add(new MostUsedApplication
-                        {
-                            ApplicationName = appName,
-                            HoursSpent = totalTimeSeconds / 3600 // Переводимо секунди в години
-                        });
-                    }
-                }
-            }
-
-            return gamesTime;
-        }
-
-
-
 
         // Завантажуємо програми, які зараз працюють
         private void LoadApplications()
@@ -277,22 +238,11 @@ namespace BLL
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
-
-
-
     }
-    public class MostUsedApplication
-    {
-        public string ApplicationName { get; set; }
-        public double HoursSpent { get; set; }
-    }
-
 
     public class SessionResult
     {
         public string ApplicationName { get; set; } = string.Empty;
         public TimeSpan SessionDuration { get; set; }
     }
-
 }
