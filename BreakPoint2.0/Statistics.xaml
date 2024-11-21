@@ -8,7 +8,26 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Statistics">
 
-    <Grid>
-        
+    <Grid Background="#f0f4f8" Margin="20">
+        <!-- Заголовок програми -->
+        <Label Content="Програма" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="290,161,0,0" />
+
+        <!-- Календар -->
+        <Calendar Name="MyCalendar" SelectionMode="MultipleRange"
+                  HorizontalAlignment="Left" VerticalAlignment="Center" Margin="42,0,0,0" />
+
+        <!-- Вибір зі списку -->
+        <ComboBox Name="MyComboBox" Width="200" Margin="409,169,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+
+        <!-- Кнопка "Пошук" -->
+        <Button Name="BackToButton" Content="Повернутись" Width="89" Margin="10,10,0,0" 
+                HorizontalAlignment="Left" VerticalAlignment="Top" Click="BackToButton_Click" Height="25" />
+
+        <Button Name="SearchButton" Content="Пошук" Width="48" Margin="643,170,0,0" 
+        HorizontalAlignment="Left" VerticalAlignment="Top" Click="SearchButton_Click" Height="20" RenderTransformOrigin="0.979,3.883" />
+
+        <!-- Загальний час -->
+        <Label Content="Загальний час:" HorizontalAlignment="Left" Margin="304,218,0,0" VerticalAlignment="Top" />
+        <Label Name="TotalTimeLabel" Content="0 секунд" HorizontalAlignment="Left" Margin="457,218,0,0" VerticalAlignment="Top" />
     </Grid>
 </Page>
