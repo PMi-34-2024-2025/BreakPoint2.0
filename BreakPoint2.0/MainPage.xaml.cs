@@ -24,8 +24,7 @@ namespace BreakPoint2._0
         {
             InitializeComponent();
 
-            _tracking = new Tracking();
-            _userService = new UserService();
+            
         }
         private void GetStatisticsButton_Click(object sender, RoutedEventArgs e)
         {
@@ -37,19 +36,7 @@ namespace BreakPoint2._0
         private void ShowAllGamesTimeButton_Click(object sender, RoutedEventArgs e)
         {
             
-            //отримання юзера
-            int userId = 1;
-
-
-            var gamesTime = _tracking.GetAllGamesTimeForUser(userId); //  метод для отримання часу ігор
-            GamesListBox.Items.Clear(); // Очищаємо список перед заповненням новими даними
-
-            foreach (var game in gamesTime)
-            {
-                GamesListBox.Items.Add(game); // Додаємо кожну гру в список
-            }
-
-            StatisticsPanel.Visibility = Visibility.Visible; // Показуємо панель статистики
+           
         }
         private void OnStatisticButtonClick(object sender, RoutedEventArgs e)
         {
