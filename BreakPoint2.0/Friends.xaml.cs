@@ -1,28 +1,54 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BLL; 
+using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace BreakPoint2._0
 {
-    /// <summary>
-    /// Interaction logic for Friends.xaml
-    /// </summary>
     public partial class Friends : Page
     {
+        private FriendShip _friendShip;  // Додаємо змінну для FriendShip
+        List<int> listFriend;
         public Friends()
         {
             InitializeComponent();
+            _friendShip = new FriendShip();  
+        }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new MainPage());
+        }
+
+        private void AddFriendButton_Click(object sender, RoutedEventArgs e)
+        {
+            string friendName = UserNameTextBox.Text;
+
+            if (string.IsNullOrWhiteSpace(friendName))
+            {
+                // Можна додати повідомлення для користувача
+                MessageBox.Show("Friend's nickname cannot be empty.");
+            }
+
+            // Викликаємо метод AddFriendToMe через екземпляр _friendShip
+            _friendShip.AddFriendToMe(friendName);
+        }
+
+        private void ViewFriendsButton_Click(object sender, RoutedEventArgs e)
+        {
+            listFriend = _friendShip.GetFriends();
+            FriendsListBox.Items.Clear(); 
+
+            if (listFriend.Count == 0)
+            {
+                MessageBox.Show("You have no friends.");
+                return;
+            }
+
+            foreach (var friendId in listFriend)
+            {
+                FriendsListBox.Items.Add($"Friend ID: {friendId}"); 
+            }
         }
     }
 }
