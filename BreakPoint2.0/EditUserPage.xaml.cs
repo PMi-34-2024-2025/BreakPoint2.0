@@ -21,15 +21,14 @@ namespace BreakPoint2._0
         {
             try
             {
-                int currentUserId = CreateAcc.CurrentUserId; // Отримуємо ID поточного користувача
+                int currentUserId = CreateAcc.CurrentUserId; 
                 _currentUser = _userService.GetUserById(currentUserId);
 
                 if (_currentUser != null)
                 {
-                    FirstNameTextBox.Text = _currentUser.FirstName;
                     UserNameTextBox.Text = _currentUser.UserName;
                     EmailTextBox.Text = _currentUser.Email;
-                    PasswordTextBox.Password = new string('•', 8); // Замаскований пароль
+                    PasswordTextBox.Password = new string('•', 8);
                 }
                 else
                 {
@@ -44,19 +43,19 @@ namespace BreakPoint2._0
 
         private void ApplyChangesButton_Click(object sender, RoutedEventArgs e)
         {
-            string firstName = FirstNameTextBox.Text;
             string userName = UserNameTextBox.Text;
             string email = EmailTextBox.Text;
             string password = PasswordTextBox.Password;
 
-            if (firstName == _currentUser.FirstName && userName == _currentUser.UserName &&
-                email == _currentUser.Email && password == new string('•', 8))
+            if (userName == _currentUser.UserName &&
+                email == _currentUser.Email &&
+                password == new string('•', 8))
             {
                 MessageBox.Show("To make changes, modify something first.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 
-            if (_userService.UpdateUser(CreateAcc.CurrentUserId, firstName, userName, email, password))
+            if (_userService.UpdateUser(CreateAcc.CurrentUserId, userName, email, password)) 
             {
                 MessageBox.Show("Changes applied successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
