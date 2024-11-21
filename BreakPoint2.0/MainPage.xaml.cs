@@ -65,8 +65,13 @@ namespace BreakPoint2._0
             // Перехід на сторінку друзів
             NavigationService.Navigate(new Friends());
         }
+        private void OnEditUserPageClick(object sender, RoutedEventArgs e)
+        {
+            // Перехід на сторінку акаунут
+            NavigationService.Navigate(new ProfilePage());
+        }
 
-         // доробити log out 
+        // доробити log out  
         private void LogOutButton_Click(object sender, RoutedEventArgs e)
         {
            // вихід з акаунту

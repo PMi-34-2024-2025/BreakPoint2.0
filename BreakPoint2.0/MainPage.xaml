@@ -4,53 +4,52 @@
       Title="Dashboard" Height="450" Width="800" Background="White">
     <Grid>
         <!-- Ліва панель -->
-        <Grid Background="#F4F4F4" Width="200" VerticalAlignment="Stretch" HorizontalAlignment="Left">
-            <StackPanel Margin="10">
+        <Grid Background="#F4F4F4" Width="200" HorizontalAlignment="Left" Margin="0,50,0,-50">
+            <StackPanel Margin="10" HorizontalAlignment="Stretch">
                 <Ellipse Width="80" Height="80" Fill="Black" HorizontalAlignment="Center" />
                 <TextBlock Text="User name" FontSize="14" FontWeight="Bold" Margin="0,10,0,2" />
                 <TextBlock Text="Account name" FontSize="12" Margin="0,0,0,20" />
 
                 <Button Content="Statistic" Margin="0,5,0,0" Height="30" Click="OnStatisticButtonClick"/>
                 <Button Content="Friend" Margin="0,5,0,0" Height="30" Click="OnFriendButtonClick"/>
-                <Button Content="Set limit on go" Margin="0,5,0,0" Height="30" />
-                <Button Content="Poll" Margin="0,5,0,0" Height="30" />
-                <Button Content="Schedule your play" Margin="0,5,0,0" Height="30" />
-                <Button Content="Reminder" Margin="0,5,0,0" Height="30" />
+                <Button Content="Tracking" Margin="0,5,0,0" Height="30" Click="OnStartStretchingClick" />
+                <Button Content="Account settings" Margin="0,5,0,0" Height="30" Click="OnEditUserPageClick"/>
             </StackPanel>
         </Grid>
 
-        <!-- Центральна панель -->
+        <!-- Центральна панель з прокручуванням -->
         <Grid Margin="200,0,200,0">
-            <StackPanel>
-                <TextBlock Text="Today" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,10,0,10" />
-                <TextBlock Text="Productive | Other stuff" HorizontalAlignment="Center" FontSize="12" />
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="0,45,0,-45">
+                <StackPanel>
+                    <TextBlock Text="Today" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,10,0,10" />
+                    <TextBlock Text="Productive | Other stuff" HorizontalAlignment="Center" FontSize="12" />
 
-                <Border BorderBrush="Gray" BorderThickness="1" Margin="20,10,20,10" Height="200" x:Name="GraphPlaceholder">
-                    <!-- Тут буде графік -->
-                    <TextBlock Text="Graph Placeholder" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                </Border>
+                    <Border BorderBrush="Gray" BorderThickness="1" Margin="20,10,20,10" Height="200" x:Name="GraphPlaceholder">
+                        <!-- Тут буде графік -->
+                        <TextBlock Text="Graph Placeholder" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
 
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
-                    <StackPanel Margin="10">
-                        <TextBlock Text="Загальний час" FontSize="12" />
-                        <TextBlock Text="4h 52m" FontSize="14" FontWeight="Bold" RenderTransformOrigin="0.673,0.582" />
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+                        <StackPanel Margin="10">
+                            <TextBlock Text="Загальний час" FontSize="12" />
+                            <TextBlock Text="4h 52m" FontSize="14" FontWeight="Bold" />
+                        </StackPanel>
                     </StackPanel>
-       
+
+                    <!-- Кнопка для отримання статистики -->
+                    <Button x:Name="GetStatisticsButton" Content="Отримати статистику" Height="30" Width="200"
+                            HorizontalAlignment="Center" Margin="0,20,0,0" Click="GetStatisticsButton_Click" />
+
+                    <!-- Панель для списку найбільш використаних програм (буде показуватися після натискання кнопки) -->
+                    <StackPanel x:Name="StatisticsPanel" Visibility="Collapsed" Margin="20,10,20,0">
+                        <!-- Кнопка для відображення всіх ігор -->
+                        <Button Content="Show All Games Time" Click="ShowAllGamesTimeButton_Click" Margin="0,10,0,0" Height="30" HorizontalAlignment="Center" />
+
+                        <!-- Список ігор -->
+                        <ListBox Name="GamesListBox" DisplayMemberPath="ApplicationName" Margin="0,10,0,0" />
+                    </StackPanel>
                 </StackPanel>
-
-                <!-- Кнопка для отримання статистики -->
-                <Button x:Name="GetStatisticsButton" Content="Отримати статистику" Height="30" Width="200"
-                        HorizontalAlignment="Center" Margin="0,20,0,0" Click="GetStatisticsButton_Click" />
-
-                <!-- Панель для списку найбільш використаних програм (буде показуватися після натискання кнопки) -->
-                <StackPanel x:Name="StatisticsPanel" Visibility="Collapsed" Margin="20,10,20,0">
-                    <!-- Кнопка для відображення всіх ігор -->
-                    <Button Content="Show All Games Time" Click="ShowAllGamesTimeButton_Click" Margin="0,10,0,0" Height="30" HorizontalAlignment="Center" />
-
-                    <!-- Список ігор -->
-                    <ListBox Name="GamesListBox" DisplayMemberPath="ApplicationName" Margin="0,10,0,0" />
-                </StackPanel>
-            </StackPanel>
+            </ScrollViewer>
         </Grid>
 
         <!-- Верхня панель із кнопками -->
