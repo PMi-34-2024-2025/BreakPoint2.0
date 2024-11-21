@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data;
-using System.Linq;
 using Npgsql;
 
 namespace BLL
@@ -53,12 +52,10 @@ namespace BLL
                 }
             }
         }
-
     }
 
     public class User
     {
-        public string UserId { get; set; }
         public string UserName { get; set; }
         public string Email { get; set; }
         public string PasswordHash { get; set; }

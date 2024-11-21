@@ -21,14 +21,14 @@ namespace BreakPoint2._0
         {
             try
             {
-                int currentUserId = CreateAcc.CurrentUserId; 
+                int currentUserId = CreateAcc.CurrentUserId;
                 _currentUser = _userService.GetUserById(currentUserId);
 
                 if (_currentUser != null)
                 {
                     UserNameTextBox.Text = _currentUser.UserName;
                     EmailTextBox.Text = _currentUser.Email;
-                    PasswordTextBox.Password = new string('•', 8);
+                    PasswordBox.Password = new string('●', _currentUser.PasswordHash.Length); 
                 }
                 else
                 {
@@ -45,19 +45,28 @@ namespace BreakPoint2._0
         {
             string userName = UserNameTextBox.Text;
             string email = EmailTextBox.Text;
-            string password = PasswordTextBox.Password;
+            string password = PasswordBox.Password;
 
-            if (userName == _currentUser.UserName &&
-                email == _currentUser.Email &&
-                password == new string('•', 8))
+            if (string.IsNullOrWhiteSpace(userName) || string.IsNullOrWhiteSpace(email))
+            {
+                MessageBox.Show("User name and email cannot be empty.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (_currentUser.UserName == userName && _currentUser.Email == email && password == new string('●', _currentUser.PasswordHash.Length))
             {
                 MessageBox.Show("To make changes, modify something first.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 
-            if (_userService.UpdateUser(CreateAcc.CurrentUserId, userName, email, password)) 
+            string updatedPassword = password == new string('●', _currentUser.PasswordHash.Length)
+                ? _currentUser.PasswordHash
+                : password;
+
+            if (_userService.UpdateUser(CreateAcc.CurrentUserId, userName, email, updatedPassword))
             {
                 MessageBox.Show("Changes applied successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                LoadUserData();
             }
             else
             {
