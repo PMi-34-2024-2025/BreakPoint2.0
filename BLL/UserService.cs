@@ -1,64 +1,63 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Data;
+using Npgsql;
 
-namespace BLL // Замініть на ваш простір імен
+namespace BLL
 {
     public class UserService
     {
-        // Список для зберігання користувачів (імітація бази даних)
-        private readonly List<User> _users = new List<User>
+        private const string ConnectionString = "Host=breakdatabase.postgres.database.azure.com;Port=5432;Database=BreakDB;Username=postgres;Password=12345678bp!";
+
+        public User GetUserById(int userId)
         {
-            new User { Email = "example@example.com", FirstName = "John", UserName = "john_doe", PasswordHash = "old_password_hash" },
-            new User { Email = "jane@example.com", FirstName = "Jane", UserName = "jane_doe", PasswordHash = "old_password_hash" }
-        };
-
-        /// <summary>
-        /// Оновлює пароль користувача
-        /// </summary>
-        /// <param name="email">Електронна пошта користувача</param>
-        /// <param name="newPassword">Новий пароль</param>
-        /// <returns>Повертає true, якщо оновлення успішне, інакше false</returns>
-        public bool UpdatePassword(string email, string newPassword)
-        {
-            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(newPassword))
+            using (var connection = new NpgsqlConnection(ConnectionString))
             {
-                return false; // Перевірка на порожні значення
+                connection.Open();
+
+                using (var command = new NpgsqlCommand("SELECT \"UserName\", \"UserEmail\", \"UserPassword\" FROM \"Users\" WHERE \"UserId\" = @UserId", connection))
+                {
+                    command.Parameters.AddWithValue("@UserId", userId);
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return new User
+                            {
+                                UserName = reader.GetString(0),
+                                Email = reader.GetString(1),
+                                PasswordHash = reader.GetString(2)
+                            };
+                        }
+                    }
+                }
             }
-
-            // Пошук користувача за email
-            var user = _users.FirstOrDefault(u => u.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
-
-            if (user == null)
-            {
-                return false; // Користувач не знайдений
-            }
-
-            // Оновлення пароля
-            user.PasswordHash = HashPassword(newPassword);
-            return true;
+            return null;
         }
 
-        /// <summary>
-        /// Хешування пароля (імітація)
-        /// </summary>
-        private string HashPassword(string password)
+        public bool UpdateUser(int userId, string userName, string email, string newPassword)
         {
-            // Для спрощення повертаємо пароль у зворотному вигляді (замініть на реальне хешування)
-            char[] passwordArray = password.ToCharArray();
-            Array.Reverse(passwordArray);
-            return new string(passwordArray);
+            using (var connection = new NpgsqlConnection(ConnectionString))
+            {
+                connection.Open();
+
+                using (var command = new NpgsqlCommand("UPDATE \"Users\" SET \"UserName\" = @UserName, \"UserEmail\" = @Email, \"UserPassword\" = @Password WHERE \"UserId\" = @UserId", connection))
+                {
+                    command.Parameters.AddWithValue("@UserName", userName);
+                    command.Parameters.AddWithValue("@Email", email);
+                    command.Parameters.AddWithValue("@Password", newPassword);
+                    command.Parameters.AddWithValue("@UserId", userId);
+
+                    return command.ExecuteNonQuery() > 0;
+                }
+            }
         }
     }
 
-    /// <summary>
-    /// Модель користувача
-    /// </summary>
     public class User
     {
-        public string Email { get; set; }
-        public string FirstName { get; set; }
         public string UserName { get; set; }
+        public string Email { get; set; }
         public string PasswordHash { get; set; }
     }
 }

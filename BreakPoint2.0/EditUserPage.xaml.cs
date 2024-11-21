@@ -1,51 +1,82 @@
 ﻿using System;
 using System.Windows;
-using BLL; // Простір імен для вашої логіки бізнесу (BLL)
+using System.Windows.Controls;
+using BLL;
 
 namespace BreakPoint2._0
 {
-    public partial class ProfilePage : Window
+    public partial class ProfilePage : Page
     {
+        private readonly UserService _userService;
+        private User _currentUser;
+
         public ProfilePage()
         {
             InitializeComponent();
-           
+            _userService = new UserService();
+            LoadUserData();
         }
 
-        private void ChangePasswordButton_Click(object sender, RoutedEventArgs e)
+        private void LoadUserData()
         {
-            string firstName = FirstNameTextBox.Text;
-            string userName = UserNameTextBox.Text;
-            string email = EmailTextBox.Text;
-            string newPassword = PasswordTextBox.Text;
-
-            if (string.IsNullOrWhiteSpace(firstName) ||
-                string.IsNullOrWhiteSpace(userName) ||
-                string.IsNullOrWhiteSpace(email) ||
-                string.IsNullOrWhiteSpace(newPassword))
-            {
-                MessageBox.Show("Please fill in all fields before updating the password.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
             try
             {
-                UserService userService = new UserService();
-                bool isUpdated = userService.UpdatePassword(email, newPassword);
+                int currentUserId = CreateAcc.CurrentUserId;
+                _currentUser = _userService.GetUserById(currentUserId);
 
-                if (isUpdated)
+                if (_currentUser != null)
                 {
-                    MessageBox.Show("Password updated successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    UserNameTextBox.Text = _currentUser.UserName;
+                    EmailTextBox.Text = _currentUser.Email;
+                    PasswordBox.Password = new string('●', _currentUser.PasswordHash.Length); 
                 }
                 else
                 {
-                    MessageBox.Show("Failed to update the password. Please try again.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("User not found.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Error loading user data: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private void ApplyChangesButton_Click(object sender, RoutedEventArgs e)
+        {
+            string userName = UserNameTextBox.Text;
+            string email = EmailTextBox.Text;
+            string password = PasswordBox.Password;
+
+            if (string.IsNullOrWhiteSpace(userName) || string.IsNullOrWhiteSpace(email))
+            {
+                MessageBox.Show("User name and email cannot be empty.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (_currentUser.UserName == userName && _currentUser.Email == email && password == new string('●', _currentUser.PasswordHash.Length))
+            {
+                MessageBox.Show("To make changes, modify something first.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            string updatedPassword = password == new string('●', _currentUser.PasswordHash.Length)
+                ? _currentUser.PasswordHash
+                : password;
+
+            if (_userService.UpdateUser(CreateAcc.CurrentUserId, userName, email, updatedPassword))
+            {
+                MessageBox.Show("Changes applied successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                LoadUserData();
+            }
+            else
+            {
+                MessageBox.Show("Failed to apply changes.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void BackToMainPage_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService?.Navigate(new MainPage());
         }
     }
 }
