@@ -25,10 +25,7 @@
                     <TextBlock Text="Today" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,10,0,10" />
                     <TextBlock Text="Productive | Other stuff" HorizontalAlignment="Center" FontSize="12" />
 
-                    <Border BorderBrush="Gray" BorderThickness="1" Margin="20,10,20,10" Height="200" x:Name="GraphPlaceholder">
-                        <!-- Тут буде графік -->
-                        <TextBlock Text="Graph Placeholder" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                    </Border>
+              
 
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
                         <StackPanel Margin="10">
@@ -45,9 +42,20 @@
                     <StackPanel x:Name="StatisticsPanel" Visibility="Collapsed" Margin="20,10,20,0">
                         <!-- Кнопка для відображення всіх ігор -->
                         <Button Content="Show All Games Time" Click="ShowAllGamesTimeButton_Click" Margin="0,10,0,0" Height="30" HorizontalAlignment="Center" />
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
 
-                        <!-- Список ігор -->
-                        <ListBox Name="GamesListBox" DisplayMemberPath="ApplicationName" Margin="0,10,0,0" />
+                            <!-- Список ігор -->
+                        <ListBox x:Name="GamesListBox">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding ApplicationName}" FontSize="16" />
+                                        <TextBlock Text="{Binding SessionDuration, StringFormat='Time Played: {0:F2} minutes'}" FontSize="14" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        </ScrollViewer>
                     </StackPanel>
                 </StackPanel>
             </ScrollViewer>
