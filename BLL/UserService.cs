@@ -49,6 +49,18 @@ namespace BLL // Замініть на ваш простір імен
             Array.Reverse(passwordArray);
             return new string(passwordArray);
         }
+        // Метод для отримання користувача за email
+        public User GetUserByEmail(string email)
+        {
+            return _users.FirstOrDefault(u => u.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
+        }
+
+        // Метод для отримання користувача за username
+        public User GetUserByUserName(string username)
+        {
+            return _users.FirstOrDefault(u => u.UserName.Equals(username, StringComparison.OrdinalIgnoreCase));
+        }
+
     }
 
     /// <summary>
