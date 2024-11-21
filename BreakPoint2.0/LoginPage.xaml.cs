@@ -28,8 +28,7 @@ namespace BreakPoint2._0
 
                 if (isLoggedIn)
                 {
-                    int? userId = _accountManager.GetCurrentUserId(); // Отримуємо ID користувача
-                    MessageBox.Show($"Login successful! Your ID: {userId}", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show($"Login successful! Your ID: {CreateAcc.CurrentUserId}", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
 
                     // Перехід на головну сторінку або іншу сторінку після успішного входу
                     NavigationService.Navigate(new MainPage());
