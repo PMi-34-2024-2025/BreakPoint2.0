@@ -17,8 +17,9 @@
                   DisplayMemberPath="Name" />
             <Button x:Name="StartButton" Content="Запуск" Margin="5" Click="StartButton_Click" IsEnabled="False"/>
             <Button x:Name="StopButton" Content="Зупинка" Margin="5" Click="StopButton_Click" IsEnabled="False"/>
+            <Button x:Name="BackButton" Content="Назад" Margin="5" Click="BackButton_Click" IsEnabled="True"/>
         </StackPanel>
-
+        
         <!-- Перший список (загальний час) -->
         <ListBox x:Name="TrackingList" 
                  Grid.Row="1" 
@@ -50,5 +51,6 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+        
     </Grid>
 </Page>
