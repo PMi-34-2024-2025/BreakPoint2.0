@@ -149,7 +149,7 @@ namespace BLL
 
                 // Отримуємо UserId і додаємо сесію до бази даних
                 CreateAcc createAcc = new CreateAcc();
-                int userId = 1; //createAcc.GetCurrentUserId(); // Викликаємо вашу функцію GetCurrentUserId
+                int userId = createAcc.GetCurrentUserId(); // Викликаємо вашу функцію GetCurrentUserId
                 AddSessionToDatabase(userId, trackedApp.GameId, LastSwitchTime, DateTime.Now);
             }
         }

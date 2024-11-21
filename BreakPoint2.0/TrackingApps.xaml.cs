@@ -42,5 +42,10 @@ namespace BreakPoint2._0
             var selectedApp = (ApplicationsComboBox.SelectedItem as ApplicationTime)?.Name;
             StartButton.IsEnabled = selectedApp != null;
         }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new MainPage());
+        }
     }
 }
