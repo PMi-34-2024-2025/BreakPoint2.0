@@ -1,12 +1,10 @@
-﻿<Window x:Class="BreakPoint2._0.ProfilePage"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Account" Height="450" Width="800">
+﻿<Page x:Class="BreakPoint2._0.ProfilePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Title="Account">
     <Grid Margin="20">
-
         <TextBlock Text="Account" FontSize="32" FontWeight="Bold" Margin="10,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
-        <Button x:Name="BackToMainPage" Content="Main Page"  FontSize="14" Width="150" Height="30" Margin="410,22,200,342" RenderTransformOrigin="0.499,-0.781" />
-
+        <Button x:Name="BackToMainPage" Content="Main Page" FontSize="14" Width="150" Height="30" Margin="410,22,200,342" RenderTransformOrigin="0.499,-0.781" Click="BackToMainPage_Click" />
 
         <Grid Margin="10,160,0,0">
             <Grid.RowDefinitions>
@@ -20,20 +18,19 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock Text="First name" FontSize="14" Grid.Column="1" VerticalAlignment="Center" Margin="32,0,445,0" />
+            <TextBlock Text="First name" FontSize="14" Grid.Column="1" VerticalAlignment="Center" Margin="24,0,460,0" />
             <TextBox x:Name="FirstNameTextBox" Grid.Row="0" Grid.Column="1" Margin="10,5" Width="300" />
 
-
-            <TextBlock Text="User name"  FontSize="14" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="32,0,446,0" />
+            <TextBlock Text="User name" FontSize="14" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="24,0,460,0" />
             <TextBox x:Name="UserNameTextBox" Grid.Row="1" Grid.Column="1" Margin="10,5" Width="300" />
 
-            <TextBlock Text="Email"  FontSize="14" Grid.Row="2" Grid.Column="1" VerticalAlignment="Top" Margin="65,6,446,0" />
-            <TextBox x:Name="EmailTextBox" Grid.Row="2" Grid.Column="1" Margin="10,5" Width="300" />
+            <TextBlock Text="Email" FontSize="14" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Margin="54,0,460,0" />
+            <TextBox x:Name="EmailTextBox" Grid.Row="2" Grid.Column="1" Margin="10,5" Width="300" IsReadOnly="True" />
 
-            <TextBlock Text="Password"  FontSize="14" Grid.Row="3" Grid.Column="1" VerticalAlignment="Top" Margin="41,6,440,0" />
-            <TextBox x:Name="PasswordTextBox" Grid.Row="3" Grid.Column="1" Margin="125,5,125,20" Width="300" />
+            <TextBlock Text="Password" FontSize="14" Grid.Row="3" Grid.Column="1" VerticalAlignment="Top" Margin="31,6,460,0" />
+            <PasswordBox x:Name="PasswordTextBox" Grid.Row="3" Grid.Column="1" Margin="125,5,125,68" Width="300" />
 
-            <Button x:Name="ChangePasswordButton" Content="Change Password"  FontSize="14" Grid.Row="3" Grid.Column="1" Width="150" Height="30" Margin="200,31,200,-18" RenderTransformOrigin="0.499,-0.781" />
+            <Button x:Name="ApplyChangesButton" Content="Apply changes" FontSize="14" Grid.Row="3" Grid.Column="1" Width="150" Height="30" Margin="200,52,200,-32" Click="ApplyChangesButton_Click" />
         </Grid>
     </Grid>
-</Window>
+</Page>

@@ -1,64 +1,73 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using Npgsql;
 
-namespace BLL // Замініть на ваш простір імен
+namespace BLL
 {
     public class UserService
     {
-        // Список для зберігання користувачів (імітація бази даних)
-        private readonly List<User> _users = new List<User>
-        {
-            new User { Email = "example@example.com", FirstName = "John", UserName = "john_doe", PasswordHash = "old_password_hash" },
-            new User { Email = "jane@example.com", FirstName = "Jane", UserName = "jane_doe", PasswordHash = "old_password_hash" }
-        };
+        private const string ConnectionString = "Host=breakdatabase.postgres.database.azure.com;Port=5432;Database=BreakDB;Username=postgres;Password=12345678bp!";
 
         /// <summary>
-        /// Оновлює пароль користувача
+        /// Отримує інформацію про користувача за його ID
         /// </summary>
-        /// <param name="email">Електронна пошта користувача</param>
-        /// <param name="newPassword">Новий пароль</param>
-        /// <returns>Повертає true, якщо оновлення успішне, інакше false</returns>
-        public bool UpdatePassword(string email, string newPassword)
+        public User GetUserById(int userId)
         {
-            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(newPassword))
+            using (var connection = new NpgsqlConnection(ConnectionString))
             {
-                return false; // Перевірка на порожні значення
+                connection.Open();
+
+                using (var command = new NpgsqlCommand("SELECT \"FirstName\", \"UserName\", \"UserEmail\", \"UserPassword\" FROM \"Users\" WHERE \"UserId\" = @UserId", connection))
+                {
+                    command.Parameters.AddWithValue("@UserId", userId);
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return new User
+                            {
+                                FirstName = reader.GetString(0),
+                                UserName = reader.GetString(1),
+                                Email = reader.GetString(2),
+                                PasswordHash = reader.GetString(3)
+                            };
+                        }
+                    }
+                }
             }
-
-            // Пошук користувача за email
-            var user = _users.FirstOrDefault(u => u.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
-
-            if (user == null)
-            {
-                return false; // Користувач не знайдений
-            }
-
-            // Оновлення пароля
-            user.PasswordHash = HashPassword(newPassword);
-            return true;
+            return null;
         }
 
         /// <summary>
-        /// Хешування пароля (імітація)
+        /// Оновлює дані користувача
         /// </summary>
-        private string HashPassword(string password)
+        public bool UpdateUser(int userId, string firstName, string userName, string email, string newPassword)
         {
-            // Для спрощення повертаємо пароль у зворотному вигляді (замініть на реальне хешування)
-            char[] passwordArray = password.ToCharArray();
-            Array.Reverse(passwordArray);
-            return new string(passwordArray);
+            using (var connection = new NpgsqlConnection(ConnectionString))
+            {
+                connection.Open();
+
+                using (var command = new NpgsqlCommand("UPDATE \"Users\" SET \"FirstName\" = @FirstName, \"UserName\" = @UserName, \"UserEmail\" = @Email, \"UserPassword\" = @Password WHERE \"UserId\" = @UserId", connection))
+                {
+                    command.Parameters.AddWithValue("@FirstName", firstName);
+                    command.Parameters.AddWithValue("@UserName", userName);
+                    command.Parameters.AddWithValue("@Email", email);
+                    command.Parameters.AddWithValue("@Password", newPassword);
+                    command.Parameters.AddWithValue("@UserId", userId);
+
+                    return command.ExecuteNonQuery() > 0;
+                }
+            }
         }
     }
 
-    /// <summary>
-    /// Модель користувача
-    /// </summary>
     public class User
     {
-        public string Email { get; set; }
         public string FirstName { get; set; }
         public string UserName { get; set; }
+        public string Email { get; set; }
         public string PasswordHash { get; set; }
     }
 }
