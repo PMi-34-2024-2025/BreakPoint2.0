@@ -15,9 +15,9 @@
         <StackPanel Orientation="Horizontal" Margin="10">
             <ComboBox x:Name="ApplicationsComboBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="200"
                   DisplayMemberPath="Name" />
-            <Button x:Name="StartButton" Content="Запуск" Margin="5" Click="StartButton_Click" IsEnabled="False"/>
-            <Button x:Name="StopButton" Content="Зупинка" Margin="5" Click="StopButton_Click" IsEnabled="False"/>
-            <Button x:Name="BackButton" Content="Назад" Margin="5" Click="BackButton_Click" IsEnabled="True"/>
+            <Button x:Name="StartButton" Content="Start" Margin="5" Click="StartButton_Click" IsEnabled="False"/>
+            <Button x:Name="StopButton" Content="Stop" Margin="5" Click="StopButton_Click" IsEnabled="False"/>
+            <Button x:Name="BackButton" Content="Back" Margin="5" Click="BackButton_Click" IsEnabled="True"/>
         </StackPanel>
         
         <!-- Перший список (загальний час) -->
