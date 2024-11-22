@@ -43,7 +43,7 @@ namespace BreakPoint2._0
             double totalTime = statistics.GetTotalTimeForGame(selectedGame, datesList);
 
             // Оновлюємо мітку з загальним часом
-            TotalTimeLabel.Content = $"{totalTime:F2} секунд";
+            TotalTimeLabel.Content = $"{totalTime:F2} seconds";
         }
 
         private void BackToButton_Click(object sender, RoutedEventArgs e)
