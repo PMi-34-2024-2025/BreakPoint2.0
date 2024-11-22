@@ -26,9 +26,43 @@ namespace BLL
             userId = CreateAcc.CurrentUserId; // Отримуємо ID поточного користувача
         }
 
+        public (string UserName, string UserEmail) GetUserDetailsById(int userId)
+        {
+            if (userId <= 0)
+            {
+                throw new ArgumentException("Invalid UserId.");
+            }
+
+            using (var connection = new NpgsqlConnection(connectionString))
+            {
+                connection.Open();
+
+                using (var command = new NpgsqlCommand(
+                    "SELECT \"UserName\", \"UserEmail\" FROM \"Users\" WHERE \"UserId\" = @UserId", connection))
+                {
+                    command.Parameters.AddWithValue("@UserId", userId);
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            string userName = reader.GetString(0);
+                            string userEmail = reader.GetString(1);
+                            return (userName, userEmail);
+                        }
+                        else
+                        {
+                            throw new InvalidOperationException("User not found.");
+                        }
+                    }
+                }
+            }
+        }
+
+
 
         // Метод для отримання статистики за сьогодні для користувача
-        // Ваш метод для отримання статистики
+        
         public ObservableCollection<GameStatistic> GetAllGamesTimeForUser()
         {
             var gamesTime = new ObservableCollection<GameStatistic>();
@@ -37,7 +71,6 @@ namespace BLL
             {
                 connection.Open();
 
-                // Get the start and end of the current day (midnight to midnight)
                 var todayStart = DateTime.Today;
                 var todayEnd = DateTime.Today.AddDays(1).AddSeconds(-1);
 
@@ -51,7 +84,6 @@ namespace BLL
                 command.Parameters.AddWithValue("@TodayStart", todayStart);
                 command.Parameters.AddWithValue("@TodayEnd", todayEnd);
 
-                // Temporary dictionary to aggregate durations by GameId
                 var gameDurations = new Dictionary<int, double>();
                 var gameNames = new Dictionary<int, string>();
 
@@ -73,7 +105,6 @@ namespace BLL
                     }
                 }
 
-                // Transform aggregated data into the result collection
                 foreach (var gameId in gameDurations.Keys)
                 {
                     gamesTime.Add(new GameStatistic

@@ -22,11 +22,25 @@ namespace BreakPoint2._0
     public partial class MainPage : Page
     {
         private CreateAcc _accountManager;
-        //private string currentUserId = _accountManager.GetCurrentUserId();
+        int currentUserId = CreateAcc.CurrentUserId;
         public MainPage()
         {
             InitializeComponent();
-            //_accountManager = new CreateAcc();
+            
+            try
+            {
+            
+                // Отримати дані користувача
+                var (userName, userEmail) = new MainPageHelper().GetUserDetailsById(currentUserId);
+
+                // Встановити значення у TextBlock
+                UserNameTextBlock.Text = userName;
+                AccountEmailTextBlock.Text = userEmail;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
 
 
         }
@@ -40,7 +54,7 @@ namespace BreakPoint2._0
         }
         private void ShowAllGamesTimeButton_Click(object sender, RoutedEventArgs e)
         {
-            int currentUserId = CreateAcc.CurrentUserId;
+       
             var mainPageHelper = new MainPageHelper();
             try
             {
@@ -49,14 +63,23 @@ namespace BreakPoint2._0
 
                 // Очищаємо попередні дані в ListBox
                 GamesListBox.Items.Clear();
-
+                double totalSeconds = 0;
                 // Додаємо нові елементи в ListBox
                 foreach (var game in userGamesTime)
                 {
                     GamesListBox.Items.Add(game);
-                }
+                    totalSeconds += game.SessionDuration * 60; //  хвилини в секунди
 
-                // Показуємо панель зі статистикою
+                }
+                // Розрахунок загального часу
+                int totalHours = (int)(totalSeconds / 3600);
+                int remainingSecondsAfterHours = (int)(totalSeconds % 3600);
+                int totalMinutes = remainingSecondsAfterHours / 60;
+                int totalRemainingSeconds = remainingSecondsAfterHours % 60;
+                
+                TotalTimeTextBlock.Text = $"{totalHours}h {totalMinutes}m {totalRemainingSeconds}s";
+
+                
                 StatisticsPanel.Visibility = Visibility.Visible;
             }
             catch (Exception ex)
