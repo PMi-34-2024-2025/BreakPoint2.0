@@ -74,5 +74,39 @@
                 <Button Content="Log Out" Width="100" Height="40" Margin="10,0,0,0" Foreground="White" Background="Black" FontWeight="Bold" Click="LogOutButton_Click" BorderBrush="White" BorderThickness="2" />
             </StackPanel>
         </Grid>
+        <!-- Кружечки, що анімуються -->
+        <Ellipse Width="120" Height="113" Fill="White" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="712,369,0,0">
+            <Ellipse.RenderTransform>
+                <ScaleTransform x:Name="CircleScale1" />
+            </Ellipse.RenderTransform>
+            <Ellipse.Triggers>
+                <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                    <BeginStoryboard Storyboard="{StaticResource CircleAnimation}" />
+                </EventTrigger>
+            </Ellipse.Triggers>
+        </Ellipse>
+
+        <Ellipse Width="40" Height="40" Fill="White" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,315,48,0">
+            <Ellipse.RenderTransform>
+                <ScaleTransform x:Name="CircleScale2" />
+            </Ellipse.RenderTransform>
+            <Ellipse.Triggers>
+                <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                    <BeginStoryboard Storyboard="{StaticResource CircleAnimation}" />
+                </EventTrigger>
+            </Ellipse.Triggers>
+        </Ellipse>
+
+
+        <Ellipse Width="63" Height="63" Fill="White" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="630,0,0,31">
+            <Ellipse.RenderTransform>
+                <ScaleTransform x:Name="CircleScale3" />
+            </Ellipse.RenderTransform>
+            <Ellipse.Triggers>
+                <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                    <BeginStoryboard Storyboard="{StaticResource CircleAnimation}" />
+                </EventTrigger>
+            </Ellipse.Triggers>
+        </Ellipse>
     </Grid>
 </Page>
