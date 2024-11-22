@@ -1,20 +1,43 @@
-
 <Page x:Class="BreakPoint2._0.MainPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      Title="Dashboard" Height="450" Width="800" Background="White">
-    <Grid>
-        <!-- Ліва панель -->
-        <Grid Background="#F4F4F4" Width="200" HorizontalAlignment="Left" Margin="0,50,0,-50">
-            <StackPanel Margin="10" HorizontalAlignment="Stretch">
-                <Ellipse Width="80" Height="80" Fill="Black" HorizontalAlignment="Center" />
-                <TextBlock Text="User name" FontSize="14" FontWeight="Bold" Margin="0,10,0,2" />
-                <TextBlock Text="Account name" FontSize="12" Margin="0,0,0,20" />
+      Title="Dashboard" Height="450" Width="800" Background="Black">
+    <Page.Resources>
+        <!-- Створення анімації для масштабування кружечків -->
+        <Storyboard x:Key="CircleAnimation" RepeatBehavior="Forever" AutoReverse="True">
+            <DoubleAnimation
+                Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)"
+                From="1" To="1.5" Duration="0:0:2" />
+            <DoubleAnimation
+                Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)"
+                From="1" To="1.5" Duration="0:0:2" />
+        </Storyboard>
+    </Page.Resources>
 
-                <Button Content="Statistic" Margin="0,5,0,0" Height="30" Click="OnStatisticButtonClick"/>
-                <Button Content="Friend" Margin="0,5,0,0" Height="30" Click="OnFriendButtonClick"/>
-                <Button Content="Tracking" Margin="0,5,0,0" Height="30" Click="OnStartStretchingClick" />
-                <Button Content="Account settings" Margin="0,5,0,0" Height="30" Click="OnEditUserPageClick"/>
+    <Grid>
+
+        <!-- Ліва панель -->
+        <Grid Background="#111111" Width="200" HorizontalAlignment="Left" Margin="0,50,0,0">
+            <StackPanel Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+                <!-- Кругла іконка профілю -->
+                <Ellipse Width="80" Height="80" Fill="White" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,10" />
+                <TextBlock Text="User name" FontSize="14" FontWeight="Bold" Foreground="White" Margin="0,10,0,2" />
+                <TextBlock Text="Account name" FontSize="12" Foreground="Gray" Margin="0,0,0,20" />
+
+                <!-- Кнопки з ефектами -->
+                <Button Content="Statistic" Height="40" Foreground="White" Background="Transparent" BorderBrush="White" BorderThickness="2" Margin="0,5,0,0" FontWeight="Bold" Click="OnStatisticButtonClick">
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5" Padding="10">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Content="Friend" Height="40" Foreground="White" Background="Transparent" BorderBrush="White" BorderThickness="2" Margin="0,5,0,0" FontWeight="Bold" Click="OnFriendButtonClick"/>
+                <Button Content="Tracking" Height="40" Foreground="White" Background="Transparent" BorderBrush="White" BorderThickness="2" Margin="0,5,0,0" FontWeight="Bold" Click="OnStartStretchingClick"/>
+                <Button Content="Account settings" Height="40" Foreground="White" Background="Transparent" BorderBrush="White" BorderThickness="2" Margin="0,5,0,0" FontWeight="Bold" Click="OnEditUserPageClick"/>
             </StackPanel>
         </Grid>
 
@@ -22,54 +45,87 @@
         <Grid Margin="200,0,200,0">
             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="0,45,0,-45">
                 <StackPanel>
-                    <TextBlock Text="Today" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,10,0,10" />
-                    <TextBlock Text="Productive | Other stuff" HorizontalAlignment="Center" FontSize="12" />
+                    <!-- Заголовок -->
+                    <TextBlock Text="Today" FontSize="22" FontWeight="Bold" HorizontalAlignment="Center" Foreground="White" Margin="0,10,0,10" />
+                    <TextBlock Text="Productive | Other stuff" HorizontalAlignment="Center" FontSize="12" Foreground="Gray" Margin="0,0,0,20"/>
 
-              
+                    <!-- Місце для графіка з тінню -->
+                    <Border BorderBrush="White" BorderThickness="2" Margin="20,10,20,10" Height="184" x:Name="GraphPlaceholder" Background="Transparent">
+                        <TextBlock Text="Graph Placeholder" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="16" FontWeight="Bold"/>
+                    </Border>
 
+
+                    <!-- Статистика -->
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
                         <StackPanel Margin="10">
-                            <TextBlock Text="Загальний час" FontSize="12" />
-                            <TextBlock Text="4h 52m" FontSize="14" FontWeight="Bold" />
+                            <TextBlock Text="Загальний час" FontSize="12" Foreground="White"/>
+                            <TextBlock Text="4h 52m" FontSize="14" FontWeight="Bold" Foreground="White"/>
                         </StackPanel>
                     </StackPanel>
+                    <Button x:Name="GetStatisticsButton" Content="Отримати статистику" Height="43" Width="200"
+                            Foreground="White" Background="Black" FontWeight="Bold" BorderBrush="White" BorderThickness="2" Click="GetStatisticsButton_Click" />
 
                     <!-- Кнопка для отримання статистики -->
-                    <Button x:Name="GetStatisticsButton" Content="Отримати статистику" Height="30" Width="200"
-                            HorizontalAlignment="Center" Margin="0,20,0,0" Click="GetStatisticsButton_Click" />
 
                     <!-- Панель для списку найбільш використаних програм (буде показуватися після натискання кнопки) -->
                     <StackPanel x:Name="StatisticsPanel" Visibility="Collapsed" Margin="20,10,20,0">
                         <!-- Кнопка для відображення всіх ігор -->
-                        <Button Content="Show All Games Time" Click="ShowAllGamesTimeButton_Click" Margin="0,10,0,0" Height="30" HorizontalAlignment="Center" />
-                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                        <Button Content="Show All Games Time" Click="ShowAllGamesTimeButton_Click" Margin="0,10,0,0" Height="40" HorizontalAlignment="Center" Foreground="White" Background="Black" FontWeight="Bold" BorderBrush="White" BorderThickness="2"/>
 
-                            <!-- Список ігор -->
-                        <ListBox x:Name="GamesListBox">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel>
-                                        <TextBlock Text="{Binding ApplicationName}" FontSize="16" />
-                                        <TextBlock Text="{Binding SessionDuration, StringFormat='Time Played: {0:F2} minutes'}" FontSize="14" />
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
-                        </ScrollViewer>
+                        <!-- Список ігор -->
+                        <ListBox Name="GamesListBox" DisplayMemberPath="ApplicationName" Margin="0,10,0,0" Foreground="White" Background="Black" BorderBrush="White" BorderThickness="2" />
                     </StackPanel>
                 </StackPanel>
             </ScrollViewer>
         </Grid>
 
         <!-- Верхня панель із кнопками -->
-        <Grid Background="#FAFAFA" Height="50" VerticalAlignment="Top" HorizontalAlignment="Stretch">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
-                <Button Width="30" Height="30" Content="🌞" Margin="5,0,0,0" />
-                <Button Width="30" Height="30" Content="🌐" Margin="5,0,0,0" />
-                <Button Content="Log Out" Width="80" Height="30" Margin="10,0,0,0" Click="LogOutButton_Click" />
+        <Grid Background="#111111" Height="50" VerticalAlignment="Top" HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="43*"/>
+                <ColumnDefinition Width="7*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="590,0,0,0" Height="50" VerticalAlignment="Center" Grid.ColumnSpan="2">
+                <Button Width="40" Height="40" Content="🌞" Margin="5,0,0,0" Foreground="White" Background="Black" FontSize="18"/>
+                <Button Width="40" Height="40" Content="🌐" Margin="5,0,0,0" Foreground="White" Background="Black" FontSize="18"/>
+                <Button Content="Log Out" Width="100" Height="40" Margin="10,0,0,0" Foreground="White" Background="Black" FontWeight="Bold" Click="LogOutButton_Click" BorderBrush="White" BorderThickness="2"/>
             </StackPanel>
         </Grid>
 
+        <!-- Кружечки, що анімуються -->
+        <Ellipse Width="120" Height="113" Fill="White" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="712,369,0,0">
+            <Ellipse.RenderTransform>
+                <ScaleTransform x:Name="CircleScale1" />
+            </Ellipse.RenderTransform>
+            <Ellipse.Triggers>
+                <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                    <BeginStoryboard Storyboard="{StaticResource CircleAnimation}" />
+                </EventTrigger>
+            </Ellipse.Triggers>
+        </Ellipse>
+
+        <Ellipse Width="40" Height="40" Fill="White" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,315,48,0">
+            <Ellipse.RenderTransform>
+                <ScaleTransform x:Name="CircleScale2" />
+            </Ellipse.RenderTransform>
+            <Ellipse.Triggers>
+                <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                    <BeginStoryboard Storyboard="{StaticResource CircleAnimation}" />
+                </EventTrigger>
+            </Ellipse.Triggers>
+        </Ellipse>
+
+
+        <Ellipse Width="63" Height="63" Fill="White" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="630,0,0,31">
+            <Ellipse.RenderTransform>
+                <ScaleTransform x:Name="CircleScale3" />
+            </Ellipse.RenderTransform>
+            <Ellipse.Triggers>
+                <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                    <BeginStoryboard Storyboard="{StaticResource CircleAnimation}" />
+                </EventTrigger>
+            </Ellipse.Triggers>
+        </Ellipse>
 
     </Grid>
 </Page>
