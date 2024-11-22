@@ -9,7 +9,82 @@
     av:DesignHeight="500"
     av:DesignWidth="800">
 
-    <Grid Background="#f0f4f8" Margin="20">
+    <Page.Resources>
+        <!-- Стилі для шрифтів -->
+        <Style x:Key="HeaderTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="36"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,50,0,25"/>
+        </Style>
+
+        <Style x:Key="PlaceholderStyle" TargetType="TextBlock">
+            <Setter Property="Width" Value="250"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Margin" Value="5,0,0,0"/>
+            <Setter Property="IsHitTestVisible" Value="False"/>
+        </Style>
+
+        <Style x:Key="TextBoxStyle" TargetType="TextBox">
+            <Setter Property="Width" Value="250"/>
+            <Setter Property="Margin" Value="0,5"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Black" Direction="320" ShadowDepth="3" Opacity="0.5" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="PasswordBoxStyle" TargetType="PasswordBox">
+            <Setter Property="Width" Value="250"/>
+            <Setter Property="Margin" Value="0,5"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Black" Direction="320" ShadowDepth="3" Opacity="0.5" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="12,6"/>
+            <Setter Property="Width" Value="160"/>
+            <Setter Property="Height" Value="50"/>
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Margin" Value="0,15,0,0"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Gray" Direction="320" ShadowDepth="5" Opacity="0.6" />
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True">
+                    <Setter Property="Background" Value="Black"/>
+                    <Setter Property="Foreground" Value="Black"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Page.Resources>
+
+
+    <Grid Background="#f5f5f5" Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -17,56 +92,29 @@
         </Grid.RowDefinitions>
 
         <!-- Заголовок -->
-        <TextBlock Text="Login"
-                   FontSize="32"
-                   FontWeight="Bold"
-                   Foreground="Black"
-                   HorizontalAlignment="Center"
-                   Margin="0,5,0,25" />
+        <TextBlock Text="Login" Style="{StaticResource HeaderTextStyle}" />
 
         <!-- Поля вводу -->
         <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center" Height="273" Width="424" Margin="0,35,0,0" Grid.Row="1">
             <!-- TextBox для введення логіна -->
             <Grid>
-                <TextBox x:Name="UsernameTextBox" Width="250" Margin="0,5"/>
+                <TextBox x:Name="UsernameTextBox" Style="{StaticResource TextBoxStyle}" />
                 <!-- Плейсхолдер для TextBox -->
-                <TextBlock x:Name="UsernamePlaceholder" Text="Username" Foreground="Gray" 
-                           VerticalAlignment="Center" HorizontalAlignment="Left" 
-                           Margin="5,0,0,0" IsHitTestVisible="False" />
+                <TextBlock x:Name="UsernamePlaceholder" Text="Username" Style="{StaticResource PlaceholderStyle}"/>
             </Grid>
 
             <!-- PasswordBox для введення паролю -->
             <Grid>
-                <PasswordBox x:Name="PasswordBox" Width="250" Margin="0,5"/>
+                <PasswordBox x:Name="PasswordBox" Style="{StaticResource PasswordBoxStyle}" />
                 <!-- Плейсхолдер для PasswordBox -->
-                <TextBlock x:Name="PasswordPlaceholder" Text="Password" Foreground="Gray" 
-                           VerticalAlignment="Center" HorizontalAlignment="Left" 
-                           Margin="5,0,0,0" IsHitTestVisible="False" />
+                <TextBlock x:Name="PasswordPlaceholder" Text="Password" Style="{StaticResource PlaceholderStyle}" />
             </Grid>
 
             <!-- Кнопка для входу -->
-            <Button Content="Log In"
-                    FontSize="16"
-                    FontWeight="Bold"
-                    Foreground="White"
-                    Background="Black"
-                    Padding="10,5"
-                    Margin="0,20,0,0"
-                    Width="150"
-                    Height="40"
-                    Click="OnStartButtonClick"/>
+            <Button Content="Log In" Style="{StaticResource ButtonStyle}" Click="OnStartButtonClick"/>
 
             <!-- Кнопка для створення аккаунта -->
-            <Button Content="Create Account"
-                    FontSize="16"
-                    FontWeight="Bold"
-                    Foreground="White"
-                    Background="Gray"
-                    Padding="10,5"
-                    Margin="0,10,0,0"
-                    Width="150"
-                    Height="40"
-                    Click="OnCreateAccountButtonClick"/>
+            <Button Content="Create Account" Style="{StaticResource ButtonStyle}" Background="Gray" Foreground="Black" Margin="0,10,0,0" Click="OnCreateAccountButtonClick"/>
         </StackPanel>
     </Grid>
 </Page>

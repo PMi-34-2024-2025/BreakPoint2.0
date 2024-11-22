@@ -5,36 +5,74 @@
     x:Class="BreakPoint2._0.StartPage"
     Title="StartPage" av:DesignHeight="500" av:DesignWidth="800">
 
-    <Grid Background="#f0f4f8" Margin="20">
+    <Page.Resources>
+        <!-- Анімація для падіння крапель -->
+        <Storyboard x:Key="RainAnimation">
+            <DoubleAnimation
+                Storyboard.TargetName="Drop1"
+                Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
+                From="-100" To="500" Duration="0:0:2" RepeatBehavior="Forever" AutoReverse="True" />
+            <DoubleAnimation
+                Storyboard.TargetName="Drop2"
+                Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
+                From="-100" To="500" Duration="0:0:3" RepeatBehavior="Forever" AutoReverse="True" BeginTime="0:0:1" />
+            <DoubleAnimation
+                Storyboard.TargetName="Drop3"
+                Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
+                From="-100" To="500" Duration="0:0:4" RepeatBehavior="Forever" AutoReverse="True" BeginTime="0:0:2" />
+        </Storyboard>
+    </Page.Resources>
+
+    <Grid Background="Black" Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="2*" />
             <RowDefinition Height="*" />
             <RowDefinition Height="3*" />
         </Grid.RowDefinitions>
 
+        <!-- Краплі -->
+        <Ellipse x:Name="Drop1" Width="15" Height="15" Fill="White" HorizontalAlignment="Left" Margin="50,0,0,0">
+            <Ellipse.RenderTransform>
+                <TranslateTransform Y="-100" />
+            </Ellipse.RenderTransform>
+        </Ellipse>
+
+        <Ellipse x:Name="Drop2" Width="15" Height="15" Fill="White" HorizontalAlignment="Left" Margin="150,0,0,0">
+            <Ellipse.RenderTransform>
+                <TranslateTransform Y="-100" />
+            </Ellipse.RenderTransform>
+        </Ellipse>
+
+        <Ellipse x:Name="Drop3" Width="15" Height="15" Fill="White" HorizontalAlignment="Left" Margin="250,0,0,0">
+            <Ellipse.RenderTransform>
+                <TranslateTransform Y="-100" />
+            </Ellipse.RenderTransform>
+        </Ellipse>
+
         <!-- Заголовок з іконкою -->
         <StackPanel Grid.Row="0" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,66,0,0" Grid.RowSpan="3">
-            <Ellipse Width="100" Height="100" Fill="#d9d9d9" Margin="0,0,0,20" />
+            <Ellipse Width="100" Height="100" Fill="White" Margin="0,0,0,20" />
             <TextBlock Text="Welcome"
                        FontSize="32"
                        FontWeight="Bold"
-                       Foreground="Black"
+                       Foreground="White"
                        HorizontalAlignment="Center"
                        Margin="0,5,0,10" />
-            <TextBlock Text="to Time Management Tool"
+            <TextBlock
                        FontSize="18"
                        FontWeight="SemiBold"
-                       Foreground="#6c757d"
-                       HorizontalAlignment="Center" />
+                       Foreground="#B0B0B0"
+                       HorizontalAlignment="Center" Text="to Time Management Tool" />
         </StackPanel>
+
 
         <!-- Кнопка -->
         <Button Width="150"
                 Height="40"
                 FontSize="16"
                 FontWeight="Bold"
-                Foreground="White"
-                Background="#007bff"
+                Foreground="Black"
+                Background="White"
                 Click="OnStartButtonClick"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Top"
@@ -53,4 +91,12 @@
 
         <!-- Порожній блок для іконки -->
     </Grid>
+
+    <!-- Запуск анімації крапель -->
+    <Page.Triggers>
+        <EventTrigger RoutedEvent="Page.Loaded">
+            <BeginStoryboard Storyboard="{StaticResource RainAnimation}" />
+        </EventTrigger>
+    </Page.Triggers>
+
 </Page>

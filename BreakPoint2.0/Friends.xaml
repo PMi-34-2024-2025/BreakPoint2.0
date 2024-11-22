@@ -5,10 +5,111 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:BreakPoint2._0"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="500" d:DesignWidth="800"
       Title="Friends">
 
-    <Grid>
-        
+    <Page.Resources>
+        <!-- Стиль кнопок -->
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Width" Value="120"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Gray" Direction="320" ShadowDepth="4" Opacity="0.6"/>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="Black"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Стиль текстових полів -->
+        <Style x:Key="TextBoxStyle" TargetType="TextBox">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Width" Value="300"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="BorderThickness" Value="2"/>
+
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Gray" Direction="320" ShadowDepth="4" Opacity="0.4"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Стиль списку друзів -->
+        <Style x:Key="ListBoxStyle" TargetType="ListBox">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Gray" Direction="320" ShadowDepth="4" Opacity="0.4"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+        </Style>
+    </Page.Resources>
+
+    <Grid Background="#f0f4f8">
+        <!-- Кнопка повернення -->
+        <Button Content="Back" 
+                Style="{StaticResource ButtonStyle}"
+                HorizontalAlignment="Right" VerticalAlignment="Top" 
+                Margin="0,10,19,0"
+                Click="BackButton_Click" Height="53"/>
+
+        <!-- Поле для введення імені -->
+        <TextBox Name="UserNameTextBox"
+                 Style="{StaticResource TextBoxStyle}"
+                 HorizontalAlignment="Left" VerticalAlignment="Top"
+                 Margin="20,10,0,0" Height="53" />
+
+        <!-- Кнопка "Add Friend" -->
+        <Button Content="Add Friend"
+                Style="{StaticResource ButtonStyle}"
+                HorizontalAlignment="Left" VerticalAlignment="Top"
+                Margin="350,10,0,0"
+                Click="AddFriendButton_Click" Height="53"/>
+
+
+        <!-- Кнопка "View Friends" -->
+        <Button Content="View Friends"
+                Style="{StaticResource ButtonStyle}"
+                HorizontalAlignment="Right" VerticalAlignment="Top"
+                Margin="0,10,183,0" 
+                Click="ViewFriendsButton_Click" RenderTransformOrigin="-0.652,0.605" Height="53"/>
+
+        <!-- Список друзів -->
+        <ListBox Name="FriendsListBox"
+                 Style="{StaticResource ListBoxStyle}"
+                 Width="472" Height="300"
+                 HorizontalAlignment="Center"
+                 Margin="0,125,0,0">
+            <ListBox.Template>
+                <ControlTemplate TargetType="ListBox">
+                    <Border Background="White" CornerRadius="10" BorderBrush="Black" BorderThickness="2">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" CanContentScroll="True">
+                            <ItemsPresenter />
+                        </ScrollViewer>
+                    </Border>
+                </ControlTemplate>
+            </ListBox.Template>
+        </ListBox>
     </Grid>
 </Page>
