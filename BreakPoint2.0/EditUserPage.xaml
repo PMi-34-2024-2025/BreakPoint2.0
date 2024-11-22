@@ -4,7 +4,7 @@
       Title="Account">
     <Grid Margin="20" Height="500" Width="800">
         <TextBlock Text="Account" FontSize="32" FontWeight="Bold" Margin="10,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
-        <Button x:Name="BackToMainPage" Content="Main Page" FontSize="14" Width="150" Height="30" Margin="540,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="BackToMainPage_Click" />
+        <Button x:Name="BackToMainPage" Content="Back" FontSize="14" Width="150" Height="30" Margin="540,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="BackToMainPage_Click" />
 
         <Grid Margin="10,80,0,0">
             <Grid.RowDefinitions>
