@@ -3,31 +3,33 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:BreakPoint2._0"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Statistics">
 
     <Grid Background="#f0f4f8" Margin="20">
         <!-- Заголовок програми -->
-        <Label Content="Program" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="290,161,0,0" />
+        <Label Content="Program" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="237,47,0,0" />
 
         <!-- Календар -->
         <Calendar Name="MyCalendar" SelectionMode="MultipleRange"
-                  HorizontalAlignment="Left" VerticalAlignment="Center" Margin="42,0,0,0" />
+                  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="42,55,0,0" />
 
         <!-- Вибір зі списку -->
-        <ComboBox Name="MyComboBox" Width="200" Margin="409,169,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+        <ComboBox Name="MyComboBox" Width="200" Margin="368,55,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
 
         <!-- Кнопка "Пошук" -->
         <Button Name="BackToButton" Content="Back" Width="89" Margin="10,10,0,0" 
                 HorizontalAlignment="Left" VerticalAlignment="Top" Click="BackToButton_Click" Height="25" />
 
-        <Button Name="SearchButton" Content="Search" Width="48" Margin="643,170,0,0" 
-        HorizontalAlignment="Left" VerticalAlignment="Top" Click="SearchButton_Click" Height="20" RenderTransformOrigin="0.979,3.883" />
+        <Button Name="SearchButton" Content="Search" Width="48" Margin="638,56,0,0" 
+                HorizontalAlignment="Left" VerticalAlignment="Top" Click="SearchButton_Click" Height="20" RenderTransformOrigin="0.979,3.883" />
 
         <!-- Загальний час -->
-        <Label Content="Total time:" HorizontalAlignment="Left" Margin="304,218,0,0" VerticalAlignment="Top" />
-        <Label Name="TotalTimeLabel" Content="0 seconds" HorizontalAlignment="Left" Margin="457,218,0,0" VerticalAlignment="Top" />
+        <Label Content="Total time:" HorizontalAlignment="Left" Margin="299,103,0,0" VerticalAlignment="Top" />
+        <Label Name="TotalTimeLabel" Content="0 seconds" HorizontalAlignment="Left" Margin="468,103,0,0" VerticalAlignment="Top" />
+
+        <!-- Контейнер для графіка -->
+        <Canvas Name="ChartCanvas" Background="White" Margin="258,150,52,10" />
     </Grid>
 </Page>

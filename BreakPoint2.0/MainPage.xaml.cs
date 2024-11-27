@@ -44,17 +44,10 @@ namespace BreakPoint2._0
 
 
         }
+        
         private void GetStatisticsButton_Click(object sender, RoutedEventArgs e)
         {
-            // Показуємо панель зі статистикою та приховуємо кнопку "Отримати статистику"
-            StatisticsPanel.Visibility = Visibility.Visible;
-            GetStatisticsButton.Visibility = Visibility.Collapsed;
-
-
-        }
-        private void ShowAllGamesTimeButton_Click(object sender, RoutedEventArgs e)
-        {
-       
+           
             var mainPageHelper = new MainPageHelper();
             try
             {
@@ -66,9 +59,12 @@ namespace BreakPoint2._0
                 double totalSeconds = 0;
                 // Додаємо нові елементи в ListBox
                 foreach (var game in userGamesTime)
-                {
-                    GamesListBox.Items.Add(game);
+                { 
                     totalSeconds += game.SessionDuration * 60; //  хвилини в секунди
+                    game.StringSessionDuration = MainPageHelper.FormatDuration(game.SessionDuration);
+                    //GamesListBox.Items.Add($"{game.ApplicationName}: {MainPageHelper.FormatDuration(game.SessionDuration)}");
+                    GamesListBox.Items.Add(game);
+                   
 
                 }
                 // Розрахунок загального часу
@@ -78,9 +74,12 @@ namespace BreakPoint2._0
                 int totalRemainingSeconds = remainingSecondsAfterHours % 60;
                 
                 TotalTimeTextBlock.Text = $"{totalHours}h {totalMinutes}m {totalRemainingSeconds}s";
+                // Перетворюємо ObservableCollection на List
+                List<GameStatistic> gameStatisticsList = userGamesTime.ToList();
 
-                
-                StatisticsPanel.Visibility = Visibility.Visible;
+                DrawPieChart(gameStatisticsList, totalSeconds);
+
+                //StatisticsPanel.Visibility = Visibility.Visible;
             }
             catch (Exception ex)
             {
@@ -119,5 +118,114 @@ namespace BreakPoint2._0
         {
             NavigationService.Navigate(new TrackingApps());
         }
+
+        // Функція для малювання кругової діаграми на Canvas
+        
+        private void DrawPieChart(List<GameStatistic> gameStatistics, double totalSeconds)
+        {
+            GraphCanvas.Children.Clear(); // Очищуємо попередню графіку
+
+            // Центр і радіус для діаграми
+            double centerX = 100; // Відносно центру Canvas
+            double centerY = 100;
+            double radius = 75; // Радіус кругової діаграми
+
+            double startAngle = 0; // Початковий кут
+
+            // Попередньо визначені кольори (без повторів)
+            List<Brush> colors = new List<Brush>
+    {
+        Brushes.Red, Brushes.Green, Brushes.Blue, Brushes.Yellow,
+        Brushes.Orange, Brushes.Purple, Brushes.Cyan, Brushes.Magenta,
+        Brushes.Brown, Brushes.Pink, Brushes.LightBlue, Brushes.LightGreen
+    };
+            int colorIndex = 0;
+
+            double legendX = 220; // Координати для розміщення легенди (збоку Canvas)
+            double legendY = 10;
+
+            foreach (var game in gameStatistics)
+            {
+                // Розрахунок відсотків для сектора
+                double gamePercentage = (game.SessionDuration * 60) / totalSeconds;
+                double sweepAngle = gamePercentage * 360;
+
+                // Використовуємо кольори з попередньо визначеного списку
+                Brush segmentColor = colors[colorIndex % colors.Count];
+                colorIndex++;
+
+                // Малювання сектора
+                PathFigure pathFigure = new PathFigure
+                {
+                    StartPoint = new Point(centerX, centerY),
+                    IsClosed = true
+                };
+
+                // Початкова точка сектора
+                double startRad = (Math.PI / 180) * startAngle;
+                Point startPoint = new Point(
+                    centerX + radius * Math.Cos(startRad),
+                    centerY + radius * Math.Sin(startRad)
+                );
+
+                pathFigure.Segments.Add(new LineSegment(startPoint, true));
+
+                // Кінцева точка сектора
+                double endAngle = startAngle + sweepAngle;
+                double endRad = (Math.PI / 180) * endAngle;
+                Point endPoint = new Point(
+                    centerX + radius * Math.Cos(endRad),
+                    centerY + radius * Math.Sin(endRad)
+                );
+
+                pathFigure.Segments.Add(new ArcSegment
+                {
+                    Point = endPoint,
+                    Size = new Size(radius, radius),
+                    SweepDirection = SweepDirection.Clockwise,
+                    IsLargeArc = sweepAngle > 180
+                });
+
+                PathGeometry geometry = new PathGeometry();
+                geometry.Figures.Add(pathFigure);
+
+                Path path = new Path
+                {
+                    Fill = segmentColor,
+                    Data = geometry
+                };
+
+                // Додавання на Canvas
+                GraphCanvas.Children.Add(path);
+
+                // Додавання легенди збоку
+                Rectangle legendColorBox = new Rectangle
+                {
+                    Width = 20,
+                    Height = 20,
+                    Fill = segmentColor,
+                    Margin = new Thickness(legendX, legendY, 0, 0)
+                };
+
+                TextBlock legendText = new TextBlock
+                {
+                    Text = game.ApplicationName,
+                    Foreground = Brushes.White,
+                    FontSize = 12,
+                    Margin = new Thickness(legendX + 25, legendY + 3, 0, 0)
+                };
+
+                // Додавання на Canvas
+                GraphCanvas.Children.Add(legendColorBox);
+                GraphCanvas.Children.Add(legendText);
+
+                // Оновлюємо координату Y для наступного запису легенди
+                legendY += 30;
+
+                // Оновлюємо початковий кут
+                startAngle += sweepAngle;
+            }
+        }
+
     }
 }
