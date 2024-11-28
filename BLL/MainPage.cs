@@ -15,6 +15,7 @@ namespace BLL
 {
     using System;
     using System.Collections.Generic;
+    using System.Drawing;
 
     public  class MainPageHelper
     {
@@ -25,6 +26,15 @@ namespace BLL
         {
             userId = CreateAcc.CurrentUserId; // Отримуємо ID поточного користувача
         }
+        // Форматування тривалості у вигляді год:хв:сек
+        public static string FormatDuration(double sessionDuration)
+        {
+            int hours = (int)(sessionDuration / 60);
+            int minutes = (int)(sessionDuration % 60);
+            int seconds = (int)((sessionDuration * 60) % 60);
+            return $"{hours}h {minutes}m {seconds}s";
+        }
+
 
         public (string UserName, string UserEmail) GetUserDetailsById(int userId)
         {
@@ -117,7 +127,11 @@ namespace BLL
 
             return gamesTime;
         }
+        // Функція для малювання кругової діаграми на Canvas
+    
 
+        // Функція для генерації випадкових кольорів для секторів
+       
     }
 
     // Клас для зберігання інформації про статистику гри
@@ -125,5 +139,6 @@ namespace BLL
     {
         public string ApplicationName { get; set; }
         public double SessionDuration { get; set; }
+        public string StringSessionDuration { get; set; }   
     }
 }
