@@ -143,6 +143,45 @@ namespace BreakPoint2._0
 
             double legendX = 220; // Координати для розміщення легенди (збоку Canvas)
             double legendY = 10;
+            if (gameStatistics.Count == 1) // Випадок з одним елементом
+            {
+                var game = gameStatistics.First();
+                Brush segmentColor = colors[colorIndex % colors.Count];
+
+                // Малювання повного кола
+                Ellipse fullCircle = new Ellipse
+                {
+                    Width = radius * 2,
+                    Height = radius * 2,
+                    Fill = segmentColor,
+                    Margin = new Thickness(centerX - radius, centerY - radius, 0, 0)
+                };
+
+                GraphCanvas.Children.Add(fullCircle);
+
+                // Додавання легенди
+                Rectangle legendColorBox = new Rectangle
+                {
+                    Width = 20,
+                    Height = 20,
+                    Fill = segmentColor,
+                    Margin = new Thickness(legendX, legendY, 0, 0)
+                };
+
+                TextBlock legendText = new TextBlock
+                {
+                    Text = game.ApplicationName,
+                    Foreground = Brushes.White,
+                    FontSize = 12,
+                    Margin = new Thickness(legendX + 25, legendY + 3, 0, 0)
+                };
+
+                // Додавання на Canvas
+                GraphCanvas.Children.Add(legendColorBox);
+                GraphCanvas.Children.Add(legendText);
+
+                return; // Закінчуємо малювання, оскільки лише один елемент
+            }
 
             foreach (var game in gameStatistics)
             {

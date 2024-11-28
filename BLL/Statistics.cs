@@ -50,14 +50,7 @@ namespace BLL
 
             return gameNames;
         }
-        public class GameStatistics
-        {
-            public string ApplicationName { get; set; }
-            public double SessionDuration { get; set; }
-            public int Month {  get; set; }
-            public int Day { get; set; }
-        }
-
+        
 
         public double GetTotalTimeForGame(string gameName, List<DateTime> selectedDates)
         {
@@ -94,51 +87,46 @@ namespace BLL
 
             return totalSeconds; // Повертаємо час в секундах
         }
-
-        public List<GameStatistics> GetGameStatisticsForMonth(string gameName, int year, int month)
+        public Dictionary<DateTime, double> GetDurationsGroupedByDate(string gameName, int userId, List<DateTime> selectedDates)
         {
-            List<GameStatistics> gameStatistics = new List<GameStatistics>();
+            var durationsByDate = new Dictionary<DateTime, double>();
 
             try
             {
                 using (var connection = new NpgsqlConnection(connectionString))
                 {
                     connection.Open();
-                    string query = $"SELECT EXTRACT(DAY FROM \"Start\") AS day, SUM(EXTRACT(epoch FROM \"End\" - \"Start\")) AS total_secondsFROMpublic.\"Sessions\"WHERE \"UserId\" = @UserId AND \"GameName\" = @GameName AND EXTRACT(YEAR FROM \"Start\") = @Year AND EXTRACT(MONTH FROM \"Start\") = @MonthGROUP BYdayORDER BYday;";
 
-            using (var command = new NpgsqlCommand(query, connection))
-            {
-                command.Parameters.AddWithValue("@UserId", userId);
-                command.Parameters.AddWithValue("@GameName", gameName);
-                command.Parameters.AddWithValue("@Year", year);
-                command.Parameters.AddWithValue("@Month", month);
+                    // Формуємо умови для фільтрації по місяцях
+                    var monthConditions = string.Join(" OR ", selectedDates.ConvertAll(date =>
+                        $"(EXTRACT(MONTH FROM \"Start\") = {date.Month} AND EXTRACT(YEAR FROM \"Start\") = {date.Year})"));
 
-                using (var reader = command.ExecuteReader())
-                {
-                    while (reader.Read())
+                    string query = $"SELECT \"Start\"::date AS session_date, SUM(EXTRACT(epoch FROM \"End\" - \"Start\")) AS total_seconds FROM public.\"Sessions\"WHERE \"UserId\" = @UserId AND \"GameName\" = @GameName AND({monthConditions}) GROUP BY \"Start\"::date ORDER BY session_date";
+
+                    using (var command = new NpgsqlCommand(query, connection))
                     {
-                        int day = reader.GetInt32(0);
-                        double totalSeconds = reader.IsDBNull(1) ? 0 : reader.GetDouble(1);
+                        command.Parameters.AddWithValue("@UserId", userId);
+                        command.Parameters.AddWithValue("@GameName", gameName);
 
-                    gameStatistics.Add(new GameStatistics
+                        using (var reader = command.ExecuteReader())
                         {
-                            ApplicationName = gameName,
-                            SessionDuration = totalSeconds, // В секундах
-                            Month = month,
-                            Day = day
-                       });
+                        while (reader.Read())
+                        {
+                        var date = reader.GetDateTime(0);
+                        var duration = reader.IsDBNull(1) ? 0 : reader.GetDouble(1);
+                        durationsByDate[date] = duration;
+                        }
                     }
                 }
             }
         }
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"Помилка при отриманні статистики для місяця: {ex.Message}");
-    }
+            catch (Exception ex)
+            {
+            Console.WriteLine($"Помилка при отриманні тривалості сесій: {ex.Message}");
+            }
 
-    return gameStatistics;
-}
+            return durationsByDate;
+        }
 
 
 

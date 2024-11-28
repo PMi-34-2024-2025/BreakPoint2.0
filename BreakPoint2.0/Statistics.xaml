@@ -30,6 +30,7 @@
         <Label Name="TotalTimeLabel" Content="0 seconds" HorizontalAlignment="Left" Margin="468,103,0,0" VerticalAlignment="Top" />
 
         <!-- Контейнер для графіка -->
+
         <Canvas Name="ChartCanvas" Background="White" Margin="258,150,52,10" />
     </Grid>
 </Page>
