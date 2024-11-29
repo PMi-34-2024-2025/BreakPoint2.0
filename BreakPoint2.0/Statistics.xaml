@@ -7,30 +7,123 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Statistics">
 
+    <Page.Resources>
+        <!-- Стиль кнопок -->
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Gray" Direction="320" ShadowDepth="4" Opacity="0.6"/>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#005A9E"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Стиль міток -->
+        <Style x:Key="LabelStyle" TargetType="Label">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#333333"/>
+        </Style>
+
+        <!-- Стиль ComboBox -->
+        <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#007ACC"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Gray" Direction="320" ShadowDepth="4" Opacity="0.4"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Стиль Canvas -->
+        <Style x:Key="CanvasStyle" TargetType="Canvas">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Margin" Value="20"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Gray" Direction="320" ShadowDepth="6" Opacity="0.5"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+
     <Grid Background="#f0f4f8" Margin="20">
-        <!-- Заголовок програми -->
-        <Label Content="Program" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="237,47,0,0" />
+        <!-- Заголовок -->
+        <TextBlock Text="Statistics"
+                   FontSize="32"
+                   FontWeight="Bold"
+                   Foreground="#333333"
+                   HorizontalAlignment="Left"
+                   Margin="20,10,0,0"/>
 
         <!-- Календар -->
-        <Calendar Name="MyCalendar" SelectionMode="MultipleRange"
-                  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="42,55,0,0" />
+        <Calendar Name="MyCalendar"
+                  SelectionMode="MultipleRange"
+                  HorizontalAlignment="Left"
+                  VerticalAlignment="Top"
+                  Margin="20,70,0,0"
+                  Width="300"
+                  Height="200"/>
 
         <!-- Вибір зі списку -->
-        <ComboBox Name="MyComboBox" Width="200" Margin="368,55,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+        <ComboBox Name="MyComboBox"
+                  Style="{StaticResource ComboBoxStyle}"
+                  HorizontalAlignment="Left"
+                  VerticalAlignment="Top"
+                  Margin="340,70,0,0"
+                  Width="200"/>
 
-        <!-- Кнопка "Пошук" -->
-        <Button Name="BackToButton" Content="Back" Width="89" Margin="10,10,0,0" 
-                HorizontalAlignment="Left" VerticalAlignment="Top" Click="BackToButton_Click" Height="25" />
+        <!-- Кнопки -->
+        <Button Name="BackToButton"
+                Content="Back"
+                Style="{StaticResource ButtonStyle}"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Margin="0,22,100,0"
+                Width="120"
+                Click="BackToButton_Click"/>
 
-        <Button Name="SearchButton" Content="Search" Width="48" Margin="638,56,0,0" 
-                HorizontalAlignment="Left" VerticalAlignment="Top" Click="SearchButton_Click" Height="20" RenderTransformOrigin="0.979,3.883" />
+
+        <Button Name="SearchButton"
+                Content="Search"
+                Style="{StaticResource ButtonStyle}"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Margin="560,70,0,0"
+                Width="100"
+                Click="SearchButton_Click"/>
 
         <!-- Загальний час -->
-        <Label Content="Total time:" HorizontalAlignment="Left" Margin="299,103,0,0" VerticalAlignment="Top" />
-        <Label Name="TotalTimeLabel" Content="0 seconds" HorizontalAlignment="Left" Margin="468,103,0,0" VerticalAlignment="Top" />
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Margin="340,130,0,0">
+            <Label Content="Total time:"
+                   Style="{StaticResource LabelStyle}"
+                   Margin="0,0,10,0"/>
+            <Label Name="TotalTimeLabel"
+                   Content="0 seconds"
+                   FontSize="18"
+                   FontWeight="Normal"
+                   Foreground="#555555"/>
+        </StackPanel>
 
-        <!-- Контейнер для графіка -->
-
-        <Canvas Name="ChartCanvas" Background="White" Margin="258,150,52,10" />
+        <!-- Графік -->
+        <Canvas Name="ChartCanvas" Background="White" Margin="287,170,52,10" />
     </Grid>
 </Page>

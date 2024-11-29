@@ -72,7 +72,7 @@
         <TextBlock Text="Account" Style="{StaticResource TitleTextStyle}" Margin="73,11,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
         <!-- Кнопка "Назад" -->
-        <Button x:Name="BackToMainPage" Content="Back" Style="{StaticResource ButtonStyle}" Margin="616,16,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="BackToMainPage_Click" Width="137"/>
+        <Button x:Name="BackToMainPage" Content="Back" Style="{StaticResource ButtonStyle}" Margin="528,17,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="BackToMainPage_Click" Width="137"/>
 
         <!-- Головна сітка -->
         <Grid Margin="10,80,0,0">
@@ -90,18 +90,18 @@
 
             <!-- Поле "User name" -->
             <TextBlock Text="User name" FontSize="24" VerticalAlignment="Center" Grid.Column="0" Margin="64,0,546,0" Grid.ColumnSpan="2"/>
-            <TextBox x:Name="UserNameTextBox" Style="{StaticResource TextBoxStyle}" Grid.Row="0" Grid.Column="1" Margin="243,15,47,15"/>
+            <TextBox x:Name="UserNameTextBox" Style="{StaticResource TextBoxStyle}" Grid.Row="0" Grid.Column="1" Margin="160,10,130,20"/>
 
             <!-- Поле "Email" -->
             <TextBlock Text="Email" FontSize="24" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0" Margin="64,0,546,0" Grid.ColumnSpan="2"/>
-            <TextBox x:Name="EmailTextBox" Style="{StaticResource TextBoxStyle}" Grid.Row="1" Grid.Column="1" Margin="243,15,47,15"/>
+            <TextBox x:Name="EmailTextBox" Style="{StaticResource TextBoxStyle}" Grid.Row="1" Grid.Column="1" Margin="160,9,0,0" HorizontalAlignment="Left" Width="300" Height="36" VerticalAlignment="Top" TextChanged="EmailTextBox_TextChanged"/>
 
             <!-- Поле "Password" -->
             <TextBlock Text="Password" FontSize="24" VerticalAlignment="Center" Grid.Row="2" Grid.Column="0" Margin="64,0,546,0" Grid.ColumnSpan="2"/>
-            <PasswordBox x:Name="PasswordBox" Style="{StaticResource PasswordBoxStyle}" Grid.Row="2" Grid.Column="1" Margin="243,15,47,15"/>
+            <PasswordBox x:Name="PasswordBox" Style="{StaticResource PasswordBoxStyle}" Grid.Row="2" Grid.Column="1" Margin="160,0,130,20" Height="30" VerticalAlignment="Bottom"/>
 
             <!-- Кнопка "Apply changes" -->
-            <Button x:Name="ApplyChangesButton" Content="Apply changes" Style="{StaticResource ButtonStyle}" Grid.Row="3" HorizontalAlignment="Left" Margin="243,15,0,15" Click="ApplyChangesButton_Click" Grid.Column="1" Width="300"/>
+            <Button x:Name="ApplyChangesButton" Content="Apply changes" Style="{StaticResource ButtonStyle}" Grid.Row="3" HorizontalAlignment="Left" Margin="160,15,0,15" Click="ApplyChangesButton_Click" Grid.Column="1" Width="300"/>
         </Grid>
     </Grid>
 </Page>
