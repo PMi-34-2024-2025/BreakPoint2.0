@@ -78,5 +78,10 @@ namespace BreakPoint2._0
         {
             NavigationService?.Navigate(new MainPage());
         }
+
+        private void EmailTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
     }
 }

@@ -80,9 +80,9 @@
         <!-- Верхня панель -->
         <Grid Background="#111111" Height="50" VerticalAlignment="Top" HorizontalAlignment="Stretch">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="590,5,0,5">
-                <Button Width="40" Height="40" Content="🌞" Margin="5,0,0,0" Foreground="White" Background="Black" FontSize="18" />
-                <Button Width="40" Height="40" Content="🌐" Margin="5,0,0,0" Foreground="White" Background="Black" FontSize="18" />
-                <Button Content="Log Out" Width="100" Height="40" Margin="10,0,0,0" Foreground="White" Background="Black" FontWeight="Bold" Click="LogOutButton_Click" BorderBrush="White" BorderThickness="2" />
+                <Button Width="29" Height="40" Content="🌞" Foreground="White" Background="Black" FontSize="18" />
+                <Button Width="31" Height="40" Content="🌐" Foreground="White" Background="Black" FontSize="18" />
+                <Button Content="Log Out" Width="98" Height="40" Foreground="White" Background="Black" FontWeight="Bold" Click="LogOutButton_Click" BorderBrush="White" BorderThickness="2" />
             </StackPanel>
         </Grid>
     </Grid>
