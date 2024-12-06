@@ -124,35 +124,7 @@ namespace BLL
             trackingThread.Start();
         }
 
-        // Зупиняємо відстеження і додаємо сесію в базу даних
-        public void StopTracking()
-        {
-            IsTracking = false;
-
-            if (trackingThread != null && trackingThread.IsAlive)
-            {
-                trackingThread.Join();
-            }
-
-            var trackedApp = TrackedTimes.FirstOrDefault(t => t.Name == SelectedApp);
-            if (trackedApp != null)
-            {
-                var sessionTime = DateTime.Now - LastSwitchTime;
-                trackedApp.TimeSpent += sessionTime;
-
-                // Додаємо запис про сесію в другий список
-                SessionResults.Add(new SessionResult
-                {
-                    ApplicationName = trackedApp.Name,
-                    SessionDuration = sessionTime
-                });
-
-                int userId = CreateAcc.CurrentUserId; // Викликаємо вашу функцію GetCurrentUserId
-                AddSessionToDatabase(userId, trackedApp.GameId, LastSwitchTime, DateTime.Now);
-            }
-        }
-
-        // Відстежуємо активне вікно
+        
         private void TrackActiveWindow()
         {
             while (IsTracking)
@@ -180,17 +152,51 @@ namespace BLL
 
                 if (activeApp == SelectedApp)
                 {
+                    // Якщо активна вибрана програма
                     var trackedApp = TrackedTimes.FirstOrDefault(t => t.Name == activeApp);
                     if (trackedApp != null)
                     {
-                        trackedApp.TimeSpent += TimeSpan.FromSeconds(1);
+                        // Додаємо час, що минув з останньої зміни
+                        trackedApp.TimeSpent += DateTime.Now - LastSwitchTime;
+                        LastSwitchTime = DateTime.Now;
                     }
+                }
+                else
+                {
+                    // Якщо активна інша програма, оновлюємо LastSwitchTime
                     LastSwitchTime = DateTime.Now;
                 }
 
                 Thread.Sleep(1000);
             }
         }
+
+        
+        public void StopTracking()
+        {
+            IsTracking = false;
+
+            if (trackingThread != null && trackingThread.IsAlive)
+            {
+                trackingThread.Join();
+            }
+
+            var trackedApp = TrackedTimes.FirstOrDefault(t => t.Name == SelectedApp);
+            if (trackedApp != null)
+            {
+                // Записуємо час сесії, якщо програма була активною
+                var sessionTime = trackedApp.TimeSpent;
+                SessionResults.Add(new SessionResult
+                {
+                    ApplicationName = trackedApp.Name,
+                    SessionDuration = sessionTime
+                });
+
+                int userId = CreateAcc.CurrentUserId; // Викликаємо вашу функцію GetCurrentUserId
+                AddSessionToDatabase(userId, trackedApp.GameId, LastSwitchTime - sessionTime, LastSwitchTime);
+            }
+        }
+
 
         [DllImport("user32.dll")]
         private static extern IntPtr GetForegroundWindow();
