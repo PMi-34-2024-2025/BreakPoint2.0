@@ -1,4 +1,5 @@
 ﻿using DAL.Models;
+using System.Collections.Generic;
 
 public class User
 {
@@ -15,4 +16,7 @@ public class User
 
     // Список сесій (багато до одного)
     public virtual ICollection<Sessions> Sessions { get; set; } = new List<Sessions>();
+
+    // Список налаштувань сесій (багато до одного)
+    public virtual ICollection<SettingsSession> SettingsSessions { get; set; } = new List<SettingsSession>();
 }
