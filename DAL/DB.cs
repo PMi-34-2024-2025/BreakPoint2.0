@@ -9,7 +9,7 @@ namespace DAL
     public class ApplicationDbContext : DbContext
     {
         // Рядок підключення
-        private const string ConnectionString = "Host=breakdatabase.postgres.database.azure.com;Port=5432;Database=BreakDB;Username=postgres;Password=12345678bp!";
+        private const string ConnectionString = "Host=breakdatabase.postgres.database.azure.com;Port=5432;Database=breakdb;Username=postgres;Password=12345678bp!";
 
         // Конструктор без параметрів (для спрощення використання)
         public ApplicationDbContext()
