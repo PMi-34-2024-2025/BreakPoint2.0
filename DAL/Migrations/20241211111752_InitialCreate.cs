@@ -96,6 +96,27 @@ namespace DAL.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "SettingsSessions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    MessageText = table.Column<string>(type: "text", nullable: false),
+                    UserId = table.Column<int>(type: "integer", nullable: false),
+                    NotificationFrequency = table.Column<TimeSpan>(type: "interval", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SettingsSessions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SettingsSessions_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Friendships_User1Id",
                 table: "Friendships",
@@ -115,6 +136,11 @@ namespace DAL.Migrations
                 name: "IX_Sessions_UserId",
                 table: "Sessions",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SettingsSessions_UserId",
+                table: "SettingsSessions",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -125,6 +151,9 @@ namespace DAL.Migrations
 
             migrationBuilder.DropTable(
                 name: "Sessions");
+
+            migrationBuilder.DropTable(
+                name: "SettingsSessions");
 
             migrationBuilder.DropTable(
                 name: "Games");
