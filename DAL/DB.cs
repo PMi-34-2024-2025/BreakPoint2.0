@@ -32,8 +32,6 @@ namespace DAL
         public DbSet<Friendship> Friendships { get; set; }
         public DbSet<Sessions> Sessions { get; set; }
         public DbSet<Game> Games { get; set; }
-        public DbSet<SettingsSession> SettingsSessions { get; set; }
-        // Конфігурація моделей
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Sessions>()
@@ -60,13 +58,6 @@ namespace DAL
                  .HasOne(s => s.Game)
                  .WithMany(g => g.Sessions)
                  .HasForeignKey(s => s.GameId);
-
-             modelBuilder.Entity<SettingsSession>()
-                .HasOne(ss => ss.User)
-                .WithMany(u => u.SettingsSessions)
-                .HasForeignKey(ss => ss.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
-
         }
     }
 }

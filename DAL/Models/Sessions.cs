@@ -13,9 +13,10 @@ namespace DAL.Models
 
         public int GameId { get; set; }
         public Game Game { get; set; }
-
         public string GameName { get; set; }
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
+
+        public int UsedTime { get; set; }
     }
 }
