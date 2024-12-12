@@ -1,0 +1,11 @@
+{
+  "settings": {
+    "documentationRules": {
+      "companyName": "YourCompany",
+      "copyrightText": "Copyright © YourCompany"
+    },
+    "layoutRules": {
+      "newlineAtEndOfFile": "require"
+    }
+  }
+}

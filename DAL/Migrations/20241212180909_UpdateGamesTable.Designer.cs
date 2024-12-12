@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241211111752_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20241212180909_UpdateGamesTable")]
+    partial class UpdateGamesTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,6 +46,9 @@ namespace DAL.Migrations
                     b.Property<DateTime>("Start")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<int>("UsedTime")
+                        .HasColumnType("integer");
+
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
 
@@ -56,31 +59,6 @@ namespace DAL.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Sessions");
-                });
-
-            modelBuilder.Entity("DAL.Models.SettingsSession", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("MessageText")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<TimeSpan>("NotificationFrequency")
-                        .HasColumnType("interval");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("SettingsSessions");
                 });
 
             modelBuilder.Entity("Friendship", b =>
@@ -170,17 +148,6 @@ namespace DAL.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("DAL.Models.SettingsSession", b =>
-                {
-                    b.HasOne("User", "User")
-                        .WithMany("SettingsSessions")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Friendship", b =>
                 {
                     b.HasOne("User", "User1")
@@ -210,8 +177,6 @@ namespace DAL.Migrations
                     b.Navigation("Friendships");
 
                     b.Navigation("Sessions");
-
-                    b.Navigation("SettingsSessions");
                 });
 #pragma warning restore 612, 618
         }
